@@ -194,13 +194,27 @@ else
     error "Échec de l'installation des dépendances"
 fi
 
-# Prisma
+# Prisma - Configuration avec variables d'environnement
 echo ""
 info "Configuration Prisma..."
-if npx prisma generate; then
-    log "Client Prisma généré"
+
+# Exporter DATABASE_URL pour Prisma
+export DATABASE_URL="mysql://$DB_USER:$DB_PASS@localhost:3306/$DB_NAME"
+
+# Méthode 1: Utiliser la variable exportée directement
+log "Génération du client Prisma avec DATABASE_URL=$DATABASE_URL"
+
+if DATABASE_URL="$DATABASE_URL" npx prisma generate --schema=./prisma/schema.prisma; then
+    log "✓ Client Prisma généré"
 else
-    error "Échec de la génération Prisma"
+    warning "Échec de la génération Prisma"
+    warning "Vous pouvez le faire manuellement après avoir vérifié la connexion DB:"
+    echo "  ${BLUE}npx prisma generate${NC}"
+    read -p "Voulez-vous continuer quand même ? (Y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Nn]$ ]]; then
+        error "Setup interrompu par l'utilisateur"
+    fi
 fi
 
 echo ""
