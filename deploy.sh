@@ -2,7 +2,8 @@
 
 ###############################################################################
 # Script de Déploiement Automatisé - Royal Editions
-# Usage: ./deploy.sh [production|staging]
+# Usage: ./deploy.sh [production|staging] [app_directory]
+# Exemple: ./deploy.sh production /home/deploy/royal-editions
 ###############################################################################
 
 set -e  # Arrêter le script en cas d'erreur
@@ -16,10 +17,17 @@ NC='\033[0m' # No Color
 
 # Configuration
 ENVIRONMENT=${1:-production}
+APP_DIR=${2:-$(pwd)}  # Utilise le répertoire courant si non spécifié
 APP_NAME="royal-editions"
-APP_DIR="/var/www/royaledition"
-BACKUP_DIR="/home/deploy/backups"
-LOG_FILE="/home/deploy/deploy.log"
+BACKUP_DIR="${HOME}/backups/royaledition"
+LOG_FILE="${HOME}/deploy-royaledition.log"
+
+# Détection automatique du user home
+USER_HOME=$(eval echo ~${SUDO_USER:-$USER})
+
+# Créer les dossiers nécessaires s'ils n'existent pas
+mkdir -p "$BACKUP_DIR"
+mkdir -p "$(dirname "$LOG_FILE")"
 
 # Fonction pour logger
 log() {
@@ -54,16 +62,40 @@ EOF
 echo -e "${NC}"
 
 log "Début du déploiement - Environnement: $ENVIRONMENT"
+log "Répertoire de l'application: $APP_DIR"
+log "Répertoire de backup: $BACKUP_DIR"
 
 # Vérifier si on est sur le bon serveur
 if [ ! -d "$APP_DIR" ]; then
-    error "Le répertoire $APP_DIR n'existe pas. Êtes-vous sur le bon serveur ?"
+    error "Le répertoire $APP_DIR n'existe pas. Spécifiez le bon chemin: ./deploy.sh $ENVIRONMENT /chemin/vers/app"
 fi
 
 # Vérifier les droits
 if [ ! -w "$APP_DIR" ]; then
     error "Vous n'avez pas les droits d'écriture sur $APP_DIR"
 fi
+
+# Vérifier que c'est bien un projet Next.js
+if [ ! -f "$APP_DIR/package.json" ]; then
+    error "package.json introuvable dans $APP_DIR. Est-ce le bon répertoire ?"
+fi
+
+# Vérifier que PM2 est installé
+if ! command -v pm2 &> /dev/null; then
+    warning "PM2 n'est pas installé. Installation..."
+    npm install -g pm2 || error "Impossible d'installer PM2"
+fi
+
+# Détecter le port utilisé (depuis .env ou ecosystem.config.js)
+APP_PORT=3000
+if [ -f "$APP_DIR/.env" ]; then
+    ENV_PORT=$(grep -E "^PORT=" "$APP_DIR/.env" | cut -d'=' -f2 | tr -d ' "'"'" || echo "")
+    if [ ! -z "$ENV_PORT" ]; then
+        APP_PORT=$ENV_PORT
+    fi
+fi
+
+log "Port détecté: $APP_PORT"
 
 # 1. Backup de la base de données
 info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -215,10 +247,22 @@ if pm2 list | grep -q "$APP_NAME"; then
     fi
 else
     log "Démarrage de la nouvelle application..."
-    if pm2 start ecosystem.config.js; then
-        log "✓ Application démarrée"
+    
+    # Vérifier si ecosystem.config.js existe
+    if [ -f "ecosystem.config.js" ]; then
+        if pm2 start ecosystem.config.js; then
+            log "✓ Application démarrée avec ecosystem.config.js"
+        else
+            error "Échec du démarrage avec ecosystem.config.js"
+        fi
     else
-        error "Échec du démarrage"
+        warning "ecosystem.config.js introuvable, démarrage manuel..."
+        # Démarrer manuellement avec npm start
+        if pm2 start npm --name "$APP_NAME" -- start; then
+            log "✓ Application démarrée avec 'npm start'"
+        else
+            error "Échec du démarrage"
+        fi
     fi
 fi
 
@@ -246,11 +290,17 @@ info "━━━━━━━━━━━━━━━━━━━━━━━━�
 log "Étape 10/10: Tests de santé..."
 info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-# Test local
-if curl -f -s http://localhost:3000 > /dev/null; then
-    log "✓ L'application répond sur localhost:3000"
+# Test local avec le port détecté
+if curl -f -s http://localhost:$APP_PORT > /dev/null; then
+    log "✓ L'application répond sur localhost:$APP_PORT"
 else
-    warning "L'application ne répond pas sur localhost:3000"
+    warning "L'application ne répond pas sur localhost:$APP_PORT (peut prendre quelques secondes...)"
+    sleep 5
+    if curl -f -s http://localhost:$APP_PORT > /dev/null; then
+        log "✓ L'application répond sur localhost:$APP_PORT"
+    else
+        warning "L'application ne répond toujours pas. Vérifiez: pm2 logs $APP_NAME"
+    fi
 fi
 
 # Test du domaine (si configuré)

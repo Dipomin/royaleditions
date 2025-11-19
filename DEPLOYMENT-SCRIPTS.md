@@ -1,6 +1,15 @@
 # 📦 Scripts de Déploiement - Royal Editions
 
-Ce dossier contient tous les scripts nécessaires pour déployer l'application Royal Editions sur un VPS.
+Ce dossier contient tous les scripts nécessaires pour déployer l'application Royal Editions sur un VPS, que ce soit un VPS neuf ou un VPS hébergeant déjà d'autres applications.
+
+## 🎯 Guides Disponibles
+
+### Pour VPS Hébergeant Déjà des Applications
+📘 **[QUICK-START-VPS.md](./QUICK-START-VPS.md)** - Setup ultra-rapide en 5 minutes
+📗 **[DEPLOYMENT-EXISTING-VPS.md](./DEPLOYMENT-EXISTING-VPS.md)** - Guide complet et détaillé
+
+### Pour VPS Neuf
+📕 **[DEPLOYMENT-VPS.md](./DEPLOYMENT-VPS.md)** - Installation complète étape par étape
 
 ## 📁 Fichiers
 
@@ -60,35 +69,37 @@ sudo bash install-vps.sh
 Script de déploiement automatisé pour mettre à jour l'application en production.
 
 **Ce qu'il fait:**
+- ✅ Détection automatique du répertoire de l'application
+- ✅ Détection du port depuis `.env`
 - ✅ Backup automatique de la base de données avant déploiement
 - ✅ Pull du code depuis Git (branche main ou staging)
 - ✅ Installation des dépendances npm
 - ✅ Génération du client Prisma
 - ✅ Application des migrations (avec confirmation)
 - ✅ Build de l'application Next.js
-- ✅ Redémarrage automatique avec PM2
-- ✅ Tests de santé (localhost et domaine)
+- ✅ Redémarrage automatique avec PM2 (gère les apps existantes)
+- ✅ Tests de santé (localhost avec port détecté)
 - ✅ Nettoyage des anciens backups
 - ✅ Logs détaillés avec timestamps
 - ✅ Rapport final avec infos utiles
 
 **Prérequis:**
-- VPS déjà configuré avec `install-vps.sh`
-- Application déjà déployée une première fois
-- Accès SSH en tant qu'utilisateur `deploy`
+- Node.js 18+, PM2, MySQL installés
+- Application déjà clonée et configurée
+- Fichier `.env` présent
 
 **Usage:**
 
 ```bash
-# Se connecter au VPS
-ssh deploy@votre-vps
-
-# Rendre le script exécutable (première fois)
-chmod +x /var/www/royaledition/deploy.sh
-
-# Déployer en production
-cd /var/www/royaledition
+# Depuis le répertoire de l'application
+cd ~/royal-editions  # Ou n'importe quel chemin
 ./deploy.sh production
+
+# Ou depuis n'importe où avec chemin spécifié
+./deploy.sh production ~/royal-editions
+
+# Déployer en staging
+./deploy.sh staging
 
 # Ou déployer en staging
 ./deploy.sh staging
@@ -96,13 +107,117 @@ cd /var/www/royaledition
 
 **Durée:** ~3-5 minutes
 
-**Logs:** Tous les déploiements sont loggés dans `/home/deploy/deploy.log`
+**Logs:** Tous les déploiements sont loggés dans `~/deploy-royaledition.log`
+
+**Compatible avec:** VPS neuf, VPS existant, n'importe quel répertoire
+
+---
+
+### 4. `quick-setup.sh`
+Script de configuration interactive pour VPS hébergeant déjà des applications.
+
+**Ce qu'il fait:**
+- ✅ Détecte automatiquement les ports utilisés et suggère un port libre
+- ✅ Configuration interactive (DB, domaine, port)
+- ✅ Création automatique de la base de données MySQL
+- ✅ Génération du fichier `.env` pré-configuré
+- ✅ Installation des dépendances npm
+- ✅ Configuration Prisma
+- ✅ Instructions Nginx et SSL personnalisées
+
+**Prérequis:**
+- VPS avec Node.js, MySQL déjà installés
+- Application clonée dans le répertoire
+
+**Usage:**
+
+```bash
+cd ~/royal-editions
+bash quick-setup.sh
+```
+
+Le script vous demandera interactivement :
+- Port à utiliser (détection auto des ports libres)
+- Nom de la base de données
+- Credentials MySQL
+- Nom de domaine
+
+**Durée:** ~5 minutes
+
+---
+
+### 5. `ecosystem.config.js`
+Configuration PM2 flexible et adaptative.
+
+**Caractéristiques:**
+- ✅ Utilise `process.cwd()` pour le répertoire courant
+- ✅ Détecte le port depuis `.env` (variable `PORT`)
+- ✅ Mode cluster avec max instances
+- ✅ Logs dans `./logs/` (relatif au répertoire de l'app)
+- ✅ Auto-restart avec protection anti-crash
+- ✅ Limite mémoire 1GB
+
+**Fonctionnement:**
+Le fichier s'adapte automatiquement selon où il est exécuté, permettant de déployer l'application dans n'importe quel répertoire.
+
+---
+
+### 6. `.env.vps.example`
+Template de configuration avec instructions détaillées pour VPS existant.
+
+**Contenu:**
+- ✅ Toutes les variables nécessaires
+- ✅ Instructions étape par étape
+- ✅ Notes sur la configuration Nginx
+- ✅ Checklist avant déploiement
+- ✅ Exemples de configuration multi-port
+
+**Usage:**
+
+```bash
+cp .env.vps.example .env
+nano .env  # Remplir les valeurs
+```
 
 ---
 
 ## 🚀 Workflow Complet de Déploiement
 
-### Première Installation (VPS vierge → Application en ligne)
+### 🆕 Scénario A: VPS Hébergeant Déjà des Applications (Recommandé)
+
+#### Setup Ultra-Rapide (5 minutes)
+
+```bash
+# 1. Cloner sur le VPS
+ssh votre-user@votre-vps
+cd ~
+git clone https://github.com/Dipomin/royaleditions.git royal-editions
+cd royal-editions
+
+# 2. Setup interactif
+bash quick-setup.sh
+# Suivre les instructions (port, DB, domaine)
+
+# 3. Compléter .env (Clerk + AWS S3)
+nano .env
+
+# 4. Build et démarrer
+npm run build
+pm2 start ecosystem.config.js
+pm2 save
+
+# 5. Configurer Nginx (suivre les instructions du script)
+# 6. Configurer SSL
+sudo certbot --nginx -d votredomaine.com
+```
+
+**Temps total:** ~10 minutes  
+**Difficulté:** ⭐⭐ (Facile)  
+**Guide complet:** [QUICK-START-VPS.md](./QUICK-START-VPS.md)
+
+---
+
+### 🌟 Scénario B: VPS Neuf (Installation Complète)
 
 #### Étape 1: Préparer le VPS
 ```bash

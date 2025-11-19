@@ -114,16 +114,68 @@ Accédez au dashboard admin sur `/admin/sign-in` avec vos identifiants Clerk.
 
 ## 🌐 Déploiement
 
-### Vercel (Recommandé)
+### Option 1: VPS Neuf (Installation Complète)
 
-\`\`\`bash
+Pour un VPS Ubuntu/Debian fraîchement installé :
+
+```bash
+# Télécharger et exécuter le script d'installation
+wget https://raw.githubusercontent.com/Dipomin/royaleditions/main/install-vps.sh
+chmod +x install-vps.sh
+sudo bash install-vps.sh
+```
+
+📖 **Guide complet**: [DEPLOYMENT-VPS.md](./DEPLOYMENT-VPS.md)
+
+### Option 2: VPS Existant (Multi-Applications)
+
+Pour un VPS qui héberge déjà d'autres applications :
+
+```bash
+# Cloner dans votre home directory
+cd ~
+git clone https://github.com/Dipomin/royaleditions.git royal-editions
+cd royal-editions
+
+# Configurer avec un port différent
+cp .env.example .env
+nano .env  # Définir PORT=3001 (ou autre port libre)
+
+# Déployer
+chmod +x deploy.sh
+./deploy.sh production
+```
+
+📖 **Guide complet**: [DEPLOYMENT-EXISTING-VPS.md](./DEPLOYMENT-EXISTING-VPS.md)
+
+### Option 3: Vercel (Déploiement Rapide)
+
+```bash
 npm i -g vercel
 vercel
-\`\`\`
+```
 
-### VPS
+### Scripts de Déploiement
 
-Consultez [DOCUMENTATION.md](./DOCUMENTATION.md#déploiement-sur-vps) pour le guide complet.
+```bash
+# Déploiement automatisé (production)
+./deploy.sh production
+
+# Déploiement staging
+./deploy.sh staging
+
+# Avec répertoire personnalisé
+./deploy.sh production /chemin/vers/app
+```
+
+📖 **Documentation des scripts**: [DEPLOYMENT-SCRIPTS.md](./DEPLOYMENT-SCRIPTS.md)
+
+## 📚 Documentation
+
+- 📘 [Guide de Déploiement VPS Neuf](./DEPLOYMENT-VPS.md) - Installation complète étape par étape
+- 📗 [Guide VPS Existant](./DEPLOYMENT-EXISTING-VPS.md) - Déploiement multi-applications
+- 📙 [Scripts de Déploiement](./DEPLOYMENT-SCRIPTS.md) - Documentation des scripts automatisés
+- 📕 [Documentation Complète](./DOCUMENTATION.md) - Architecture et développement
 
 ## 🤝 Contribution
 
