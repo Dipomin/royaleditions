@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'royal-editions',
+      name: 'royaleditions',
       script: 'npm',
       args: 'start',
       cwd: process.cwd(), // Utilise le répertoire courant
