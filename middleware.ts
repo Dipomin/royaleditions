@@ -9,6 +9,8 @@ const isPublicRoute = createRouteMatcher([
   '/faq',
   '/panier',
   '/commander',
+  '/admin/sign-in(.*)',
+  '/admin/sign-up(.*)',
   '/api/books(.*)',
   '/api/categories(.*)',
   '/api/orders(.*)',
