@@ -45,7 +45,7 @@ export function AddToCartButton({ book }: AddToCartButtonProps) {
       disabled={book.stock === 0}
     >
       <ShoppingCart className="mr-2 h-5 w-5" />
-      {book.stock === 0 ? "Rupture de stock" : "Ajouter au panier"}
+      {book.stock === 0 ? "Rupture de stock" : `Ajouter au panier ${book.price}F CFA`}
     </Button>
   );
 }

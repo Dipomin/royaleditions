@@ -255,7 +255,7 @@ export default async function BookPage({ params }: BookPageProps) {
               </div>
               <div className="flex items-center space-x-3 text-gray-700">
                 <Truck className="h-5 w-5 text-gold" />
-                <span>Livraison dans toute la Côte d&apos;Ivoire</span>
+                <span>Livraison partout en Côte d&apos;Ivoire</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-700">
                 <Shield className="h-5 w-5 text-gold" />

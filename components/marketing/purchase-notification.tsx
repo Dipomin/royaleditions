@@ -19,7 +19,7 @@ const SAMPLE_PURCHASES: Purchase[] = [
   {
     id: "1",
     customerName: "Aminata K.",
-    bookTitle: "1000 Techniques de Vente",
+    bookTitle: "1000 techniques pour convaincre et influencer avec impact ",
     bookImage: "/assets/1000_techniques_book_2.png",
     location: "Abidjan",
     timeAgo: "il y a 2 minutes",
@@ -27,7 +27,7 @@ const SAMPLE_PURCHASES: Purchase[] = [
   {
     id: "2",
     customerName: "Kouassi D.",
-    bookTitle: "Leadership & Management",
+    bookTitle: "1000 techniques pour convaincre et influencer avec impact ",
     bookImage: "/assets/1000_techniques_book_2.png",
     location: "Yamoussoukro",
     timeAgo: "il y a 5 minutes",
@@ -35,7 +35,7 @@ const SAMPLE_PURCHASES: Purchase[] = [
   {
     id: "3",
     customerName: "Fatoumata S.",
-    bookTitle: "Développement Personnel",
+    bookTitle: "1000 techniques pour convaincre et influencer avec impact ",
     bookImage: "/assets/1000_techniques_book_2.png",
     location: "Bouaké",
     timeAgo: "il y a 8 minutes",
@@ -43,10 +43,34 @@ const SAMPLE_PURCHASES: Purchase[] = [
   {
     id: "4",
     customerName: "Ibrahim T.",
-    bookTitle: "Marketing Digital",
+    bookTitle: "1000 techniques pour convaincre et influencer avec impact ",
     bookImage: "/assets/1000_techniques_book_2.png",
     location: "San-Pédro",
     timeAgo: "il y a 12 minutes",
+  },
+  {
+    id: "5",
+    customerName: "Artur C.",
+    bookTitle: "1000 techniques pour convaincre et influencer avec impact ",
+    bookImage: "/assets/1000_techniques_book_2.png",
+    location: "Abidjan",
+    timeAgo: "il y a 25 minutes",
+  },
+  {
+    id: "6",
+    customerName: "Armel G.",
+    bookTitle: "1000 techniques pour convaincre et influencer avec impact ",
+    bookImage: "/assets/1000_techniques_book_2.png",
+    location: "Abidjan",
+    timeAgo: "il y a 32 minutes",
+  },
+  {
+    id: "7",
+    customerName: "Yaya K.",
+    bookTitle: "1000 techniques pour convaincre et influencer avec impact ",
+    bookImage: "/assets/1000_techniques_book_2.png",
+    location: "Abidjan",
+    timeAgo: "il y a 55 minutes",
   },
 ];
 
@@ -66,16 +90,16 @@ export function PurchaseNotification() {
       // Masquer après 6 secondes
       setTimeout(() => {
         setIsVisible(false);
-      }, 6000);
+      }, 8000);
     };
 
-    // Première notification après 5 secondes
-    const initialTimeout = setTimeout(showNotification, 5000);
+    // Première notification après 20 secondes
+    const initialTimeout = setTimeout(showNotification, 20000);
 
     // Notifications suivantes toutes les 20-35 secondes
     const interval = setInterval(() => {
       showNotification();
-    }, Math.random() * 15000 + 20000);
+    }, Math.random() * 15000 + 30000);
 
     return () => {
       clearTimeout(initialTimeout);

@@ -15,7 +15,7 @@ export function AnalyticsScripts({
   const fbPixelId =
     facebookPixelId ||
     process.env.NEXT_PUBLIC_FACEBOOK_PIXEL_ID ||
-    "YOUR_FACEBOOK_PIXEL_ID";
+    "1884503549136689";
   const gaId =
     googleAnalyticsId ||
     process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ||

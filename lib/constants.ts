@@ -1,6 +1,6 @@
 export const SITE_CONFIG = {
   name: 'Royal Editions',
-  description: 'Votre librairie premium pour des livres d\'exception',
+  description: 'Des ouvrages qui forment, inspirent et transforment',
   url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
   ogImage: '/assets/Logo-Royal-Editions.png',
   links: {

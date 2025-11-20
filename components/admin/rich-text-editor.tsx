@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -16,6 +17,7 @@ import {
   Undo,
   Redo,
 } from "lucide-react";
+import { ImageUploadModal } from "./image-upload-modal";
 
 interface RichTextEditorProps {
   content: string;
@@ -23,10 +25,16 @@ interface RichTextEditorProps {
 }
 
 export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image,
+      Image.configure({
+        HTMLAttributes: {
+          class: "rounded-lg max-w-full h-auto",
+        },
+      }),
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {
@@ -50,10 +58,12 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
   if (!editor) return null;
 
   const addImage = () => {
-    const url = window.prompt("URL de l'image:");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
+    setIsImageModalOpen(true);
+  };
+
+  const handleImageSelect = (url: string) => {
+    editor.chain().focus().setImage({ src: url }).run();
+    setIsImageModalOpen(false);
   };
 
   const addLink = () => {
@@ -165,6 +175,14 @@ export function RichTextEditor({ content, onChange }: RichTextEditorProps) {
         </Button>
       </div>
       <EditorContent editor={editor} />
+
+      {/* Modal d'upload d'images */}
+      <ImageUploadModal
+        open={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        onImageSelect={handleImageSelect}
+        folder="editor-images"
+      />
     </div>
   );
 }
