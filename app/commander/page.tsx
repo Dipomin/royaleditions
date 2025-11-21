@@ -53,7 +53,7 @@ export default function CheckoutPage() {
             Ajoutez des articles à votre panier avant de passer commande
           </p>
           <Button size="lg" className="btn-royal-blue" asChild>
-            <Link href="/boutique">Explorer la boutique</Link>
+            <Link href="/livre">Explorer la boutique</Link>
           </Button>
         </div>
       </div>

@@ -148,7 +148,7 @@ export default function AboutPage() {
               l&apos;excellence
             </p>
             <Button size="lg" className="btn-gold text-lg h-14 px-8" asChild>
-              <Link href="/boutique">
+              <Link href="/livre">
                 Explorer la boutique
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>

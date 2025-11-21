@@ -309,7 +309,7 @@ export default async function OrderConfirmationPage({
             Imprimer la facture
           </Button>
           <Button size="lg" className="btn-royal-blue" asChild>
-            <Link href="/boutique">Continuer mes achats</Link>
+            <Link href="/livre">Continuer mes achats</Link>
           </Button>
         </div>
       </div>

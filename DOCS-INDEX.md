@@ -36,8 +36,13 @@ Guide complet pour choisir la bonne documentation selon votre situation.
 | Besoin | Document | Description |
 |--------|----------|-------------|
 | Scripts de déploiement | [DEPLOYMENT-SCRIPTS.md](./DEPLOYMENT-SCRIPTS.md) | Doc complète de tous les scripts |
+| Migration BDD | [docs/DATABASE-MIGRATION.md](./docs/DATABASE-MIGRATION.md) | Guide migration locale → VPS |
+| Dépannage migration | [docs/DATABASE-MIGRATION-TROUBLESHOOTING.md](./docs/DATABASE-MIGRATION-TROUBLESHOOTING.md) | Résolution erreurs migration |
+| Configuration email | [docs/VPS-EMAIL-SETUP.md](./docs/VPS-EMAIL-SETUP.md) | Installation système email |
+| SMTP | [docs/SMTP-CONFIGURATION.md](./docs/SMTP-CONFIGURATION.md) | Configuration nodemailer |
 | Variables d'environnement | [.env.example](./.env.example) | Template général |
 | Variables VPS | [.env.vps.example](./.env.vps.example) | Template multi-app |
+| Variables migration | [.env.migration.example](./.env.migration.example) | Template migration BDD |
 | Configuration PM2 | [ecosystem.config.js](./ecosystem.config.js) | Config process manager |
 
 ### 💻 Développement
@@ -94,6 +99,9 @@ Guide complet pour choisir la bonne documentation selon votre situation.
 | PM2 ne démarre pas | [DEPLOYMENT-SCRIPTS.md](./DEPLOYMENT-SCRIPTS.md#pm2-ne-trouve-pas-lapplication) |
 | Base de données inaccessible | [DEPLOYMENT-VPS.md](./DEPLOYMENT-VPS.md#problème-erreur-de-connexion-à-la-base-de-données) |
 | Images ne s'affichent pas | [DEPLOYMENT-VPS.md](./DEPLOYMENT-VPS.md#problème-images-ne-saffichent-pas) |
+| Erreur migration BDD | [docs/DATABASE-MIGRATION-TROUBLESHOOTING.md](./docs/DATABASE-MIGRATION-TROUBLESHOOTING.md) |
+| MySQL non accessible | [docs/DATABASE-MIGRATION-TROUBLESHOOTING.md](./docs/DATABASE-MIGRATION-TROUBLESHOOTING.md#erreurs-de-connexion) |
+| Email ne s'envoie pas | [docs/SMTP-CONFIGURATION.md](./docs/SMTP-CONFIGURATION.md#dépannage) |
 
 ### Commandes Fréquentes
 
@@ -112,6 +120,14 @@ pm2 monit
 
 # Backup DB manuelle
 mysqldump -u royaledition_user -p royaledition > backup.sql
+
+# Migration BDD vers VPS
+./migrate-db-to-vps.sh
+# ou
+npm run db:migrate-to-vps
+
+# Vérifier système email VPS
+./check-mail-system.sh
 ```
 
 ---
@@ -122,16 +138,21 @@ mysqldump -u royaledition_user -p royaledition > backup.sql
 - `deploy.sh` - Déploiement automatisé
 - `install-vps.sh` - Installation VPS neuf
 - `quick-setup.sh` - Setup interactif VPS existant
+- `migrate-db-to-vps.sh` - Migration base de données
+- `check-mail-system.sh` - Diagnostic système email (si installé)
+- `check-email-compatibility.sh` - Vérification compatibilité email VPS
 
 ### Configuration
 - `.env.example` - Template général
 - `.env.vps.example` - Template multi-app
+- `.env.migration.example` - Template migration BDD
 - `ecosystem.config.js` - Configuration PM2
 - `next.config.ts` - Configuration Next.js
 - `tsconfig.json` - Configuration TypeScript
 - `prisma/schema.prisma` - Schema base de données
+- `prisma/migrate-data.ts` - Script Prisma migration
 
-### Documentation
+### Documentation Principale
 - `README.md` - Documentation principale
 - `QUICK-START-VPS.md` - Guide rapide VPS existant ⭐
 - `DEPLOYMENT-EXISTING-VPS.md` - Guide complet VPS existant
@@ -139,6 +160,16 @@ mysqldump -u royaledition_user -p royaledition > backup.sql
 - `DEPLOYMENT-SCRIPTS.md` - Documentation des scripts
 - `DOCUMENTATION.md` - Architecture technique
 - `GUIDE-CLERK-ADMIN.md` - Configuration authentification
+
+### Documentation Spécialisée (docs/)
+- `docs/DATABASE-MIGRATION.md` - Guide migration BDD ⭐
+- `docs/DATABASE-MIGRATION-TROUBLESHOOTING.md` - Dépannage migration
+- `docs/VPS-EMAIL-SETUP.md` - Installation système email
+- `docs/SMTP-CONFIGURATION.md` - Configuration SMTP
+- `docs/AWS-S3-CONFIGURATION.md` - Configuration stockage images
+- `docs/ANALYTICS-SETUP.md` - Google Analytics & Meta Pixel
+- `docs/CHAT-SYSTEM.md` - Système de chat en direct
+- `docs/MARKETING-FEATURES.md` - Fonctionnalités marketing
 
 ---
 

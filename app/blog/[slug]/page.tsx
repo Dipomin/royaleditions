@@ -127,7 +127,7 @@ export default async function BlogPostPage({
         {/* Content */}
         <div className="max-w-4xl mx-auto">
           <div
-            className="prose prose-lg max-w-none
+            className="rich-content prose prose-lg max-w-none
               prose-headings:font-heading prose-headings:text-royal-blue
               prose-a:text-gold prose-a:no-underline hover:prose-a:underline
               prose-strong:text-royal-blue

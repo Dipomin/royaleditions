@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/boutique`,
+      url: `${baseUrl}/livre`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.9,
@@ -66,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Pages de livres
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const bookPages = books.map((book: any) => ({
-    url: `${baseUrl}/boutique/${book.slug}`,
+    url: `${baseUrl}/livre/${book.slug}`,
     lastModified: book.updatedAt,
     changeFrequency: 'weekly' as const,
     priority: 0.8,

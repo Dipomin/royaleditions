@@ -95,7 +95,7 @@ export function BookCard({ book }: BookCardProps) {
 
       {/* Image */}
       <div className="relative aspect-3/4 overflow-hidden bg-gray-100">
-        <Link href={`/boutique/${book.slug}`} className="absolute inset-0">
+        <Link href={`/livre/${book.slug}`} className="absolute inset-0">
           <Image
             src={mainImage}
             alt={book.title}
@@ -112,7 +112,7 @@ export function BookCard({ book }: BookCardProps) {
             className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 pointer-events-auto"
             asChild
           >
-            <Link href={`/boutique/${book.slug}`}>
+            <Link href={`/livre/${book.slug}`}>
               <Eye className="mr-2 h-4 w-4" />
               Voir détails
             </Link>
@@ -130,7 +130,7 @@ export function BookCard({ book }: BookCardProps) {
         )}
 
         {/* Title */}
-        <Link href={`/boutique/${book.slug}`}>
+        <Link href={`/livre/${book.slug}`}>
           <h3 className="font-heading text-xl font-semibold text-gray-900 line-clamp-2 hover:text-royal-blue transition-colors">
             {book.title}
           </h3>

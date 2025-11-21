@@ -11,8 +11,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { RichTextEditor } from "@/components/admin/rich-text-editor";
+import { ImageUploadModal } from "@/components/admin/image-upload-modal";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Image as ImageIcon, X } from "lucide-react";
+import Image from "next/image";
 
 type BlogPostFormInput = {
   title: string;
@@ -29,6 +31,8 @@ export function BlogPostForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [content, setContent] = useState("");
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [coverImageUrl, setCoverImageUrl] = useState<string>("");
 
   const {
     register,
@@ -51,6 +55,7 @@ export function BlogPostForm() {
         ...data,
         content,
         published: data.published || false,
+        coverImage: coverImageUrl || data.coverImage || undefined,
       };
 
       const res = await fetch("/api/blog", {
@@ -74,7 +79,10 @@ export function BlogPostForm() {
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-6 max-w-7xl mx-auto">
+    <form
+      onSubmit={handleSubmit(onSubmit as any)}
+      className="space-y-6 max-w-7xl mx-auto"
+    >
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <Card className="p-6 space-y-4">
@@ -167,12 +175,50 @@ export function BlogPostForm() {
               Image de Couverture
             </h2>
 
+            {/* Prévisualisation de l'image */}
+            {coverImageUrl && (
+              <div className="relative w-full aspect-video rounded-lg overflow-hidden border-2 border-gray-200">
+                <Image
+                  src={coverImageUrl}
+                  alt="Couverture"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+                <button
+                  type="button"
+                  onClick={() => setCoverImageUrl("")}
+                  className="absolute top-2 right-2 p-2 bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors shadow-lg"
+                  title="Retirer l'image"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            )}
+
+            {/* Bouton de sélection */}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsImageModalOpen(true)}
+              className="w-full border-2 border-dashed border-gray-300 hover:border-gold hover:bg-gold/5"
+            >
+              <ImageIcon className="h-5 w-5 mr-2" />
+              {coverImageUrl ? "Changer l'image" : "Sélectionner une image"}
+            </Button>
+
+            {/* Input manuel optionnel */}
             <div>
-              <Label htmlFor="coverImage">URL de l&apos;image</Label>
+              <Label htmlFor="coverImage" className="text-xs text-gray-600">
+                Ou saisir une URL manuellement
+              </Label>
               <Input
                 id="coverImage"
                 {...register("coverImage")}
+                value={coverImageUrl}
+                onChange={(e) => setCoverImageUrl(e.target.value)}
                 placeholder="https://example.com/image.jpg"
+                className="text-sm"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Dimensions recommandées : 1200x630px
@@ -226,6 +272,18 @@ export function BlogPostForm() {
           </div>
         </div>
       </div>
+
+      {/* Modal de sélection d'images */}
+      <ImageUploadModal
+        open={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        onImageSelect={(url) => {
+          setCoverImageUrl(url);
+          setIsImageModalOpen(false);
+        }}
+        folder="blog-covers"
+        currentImages={coverImageUrl ? [coverImageUrl] : []}
+      />
     </form>
   );
 }

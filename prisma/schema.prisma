@@ -178,3 +178,23 @@ model LegalPage {
   @@index([slug])
   @@index([published])
 }
+
+// Codes promotionnels
+model PromoCode {
+  id            String   @id @default(cuid())
+  code          String   @unique // Code unique (ex: "ROYAL2024")
+  description   String?  @db.Text
+  discountType  String   // "percentage" ou "fixed"
+  discountValue Decimal  @db.Decimal(10, 2) // Pourcentage (ex: 10 pour 10%) ou montant fixe
+  minAmount     Decimal? @db.Decimal(10, 2) // Montant minimum de commande
+  maxUses       Int?     // Nombre maximum d'utilisations (null = illimité)
+  usedCount     Int      @default(0) // Nombre d'utilisations
+  active        Boolean  @default(true)
+  expiresAt     DateTime? // Date d'expiration (null = pas d'expiration)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([code])
+  @@index([active])
+  @@index([expiresAt])
+}

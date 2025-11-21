@@ -1,8 +1,45 @@
 # Guide de configuration du système de messagerie sur VPS
 
+## 🎯 Recommandations selon votre distribution
+
+| Distribution VPS | Solution Recommandée | Difficulté |
+|------------------|---------------------|------------|
+| Ubuntu 24.04 LTS | **Mail-in-a-Box** ou **iRedMail** | ⭐ (Très facile) |
+| Ubuntu 22.04 LTS | **Mail-in-a-Box** | ⭐ (Très facile) |
+| Ubuntu 20.04 LTS | **iRedMail** ou Service SMTP tiers | ⭐⭐ (Facile) |
+| Debian 11/12 | **iRedMail** ou Service SMTP tiers | ⭐⭐ (Facile) |
+| CentOS/Rocky Linux | **iRedMail** ou Service SMTP tiers | ⭐⭐ (Facile) |
+| Autre | **Service SMTP tiers** (SendGrid, Mailgun) | ⭐ (Très facile) |
+
+💡 **Pour Ubuntu 24.04 LTS** : Mail-in-a-Box est en cours d'adaptation pour Ubuntu 24.04. Si vous rencontrez des problèmes, utilisez **iRedMail** (100% compatible) ou un **service SMTP tiers**.
+
+💡 **Pour la plupart des cas** : Utiliser un **service SMTP tiers** (SendGrid, Mailgun, Amazon SES) est souvent plus simple et plus fiable que gérer son propre serveur mail.
+
+---
+
 ## 🔍 Étape 1 : Vérifier le système de messagerie existant
 
-Connectez-vous à votre VPS en SSH et exécutez ces commandes :
+### A. Script de vérification automatique (Recommandé)
+
+Utilisez le script fourni qui vérifie automatiquement votre distribution, les ports, et donne des recommandations :
+
+```bash
+# Sur votre VPS
+./check-email-compatibility.sh
+```
+
+Ce script vous indiquera :
+- ✅ Votre distribution et version
+- ✅ Compatibilité Mail-in-a-Box
+- ✅ Compatibilité iRedMail
+- ✅ Ports mail ouverts
+- ✅ Services mail existants
+- ✅ RAM disponible
+- ✅ Recommandation personnalisée
+
+### B. Vérification manuelle
+
+Ou connectez-vous à votre VPS en SSH et exécutez ces commandes :
 
 ```bash
 # Se connecter au VPS
@@ -43,13 +80,42 @@ ss -tulpn | grep -E ':(25|587|465|143|993|110|995)'
 
 Si aucun système n'est installé, voici 3 options :
 
+### ⚙️ Vérifier votre distribution d'abord
+
+```bash
+# Connaître votre distribution et version
+cat /etc/os-release
+
+# Ou
+lsb_release -a
+
+# Exemples de sorties:
+# Ubuntu 22.04 LTS  → Mail-in-a-Box OK
+# Ubuntu 20.04 LTS  → Utiliser iRedMail ou manuel
+# Debian 11/12      → Utiliser iRedMail ou manuel
+# CentOS 7/8        → Utiliser iRedMail ou manuel
+```
+
 ### Option 1 : Mail-in-a-Box (RECOMMANDÉ - Tout automatisé)
 
 **Le plus simple** : Installation automatique complète avec webmail Roundcube.
 
+⚠️ **IMPORTANT** : Versions Ubuntu supportées officiellement : **14.04, 18.04, 22.04**
+
+⚙️ **Ubuntu 24.04 LTS** : Le support est en cours. Vérifiez sur [mailinabox.email](https://mailinabox.email) ou utilisez **iRedMail** (Option 2) qui est 100% compatible.
+
 ```bash
-# Sur Ubuntu 22.04 LTS
+# Vérifier la version Ubuntu d'abord
+lsb_release -a
+
+# Pour Ubuntu 22.04 LTS (testé et stable):
 curl -s https://mailinabox.email/setup.sh | sudo bash
+
+# Pour Ubuntu 24.04 LTS (si supporté) ou utiliser iRedMail:
+# Vérifier d'abord: https://mailinabox.email/
+# Sinon: Option 2 (iRedMail) recommandée
+
+# Si autre distribution (Debian, CentOS, etc.), utilisez l'Option 2 ou 3
 ```
 
 ✅ **Avantages** :
@@ -60,18 +126,30 @@ curl -s https://mailinabox.email/setup.sh | sudo bash
 - Anti-spam et antivirus inclus
 - Sauvegardes automatiques
 
+❌ **Limitations** :
+- Ubuntu uniquement (versions spécifiques)
+- Support Ubuntu 24.04 en cours de développement
+- Ne fonctionne pas sur Debian, CentOS, ou autres distributions
+
 📝 **Après installation** :
 - Webmail : `https://box.royaleditions.com`
 - Admin : `https://box.royaleditions.com/admin`
 
 ---
 
-### Option 2 : iRedMail (Configuration simple)
+---
 
-**Bon compromis** entre facilité et contrôle.
+### Option 2 : iRedMail (RECOMMANDÉ pour Ubuntu 24.04 - Toutes distributions)
+
+**Bon compromis** entre facilité et contrôle. Compatible avec Ubuntu 24.04, Debian, CentOS, Rocky Linux, etc.
+
+⭐ **SOLUTION RECOMMANDÉE pour Ubuntu 24.04 LTS** - 100% compatible et testé.
 
 ```bash
-# Télécharger iRedMail
+# Vérifier que votre système est supporté
+# iRedMail supporte: Ubuntu (20.04, 22.04, 24.04), Debian, CentOS, Rocky Linux, OpenBSD, FreeBSD
+
+# Télécharger iRedMail (dernière version stable)
 wget https://github.com/iredmail/iRedMail/archive/1.6.8.tar.gz
 tar xvf 1.6.8.tar.gz
 cd iRedMail-1.6.8
@@ -81,10 +159,25 @@ sudo bash iRedMail.sh
 ```
 
 ✅ **Avantages** :
+- ✅ **Compatible Ubuntu 24.04 LTS** (testé)
+- Compatible avec la plupart des distributions Linux
 - Installation guidée interactive
 - Webmail Roundcube ou SOGo
 - Interface admin graphique
-- Anti-spam et antivirus
+- Anti-spam et antivirus inclus
+- Documentation complète
+- Communauté active
+
+📝 **Configuration recommandée durant l'installation** :
+- Backend : **MySQL** (plus simple)
+- Webmail : **Roundcube** (plus populaire)
+- Composants optionnels : Oui à tout (recommandé)
+- Domaine : `royaleditions.com`
+
+🔗 **Ressources** :
+- Site officiel : https://www.iredmail.org/
+- Documentation : https://docs.iredmail.org/
+- Forum : https://forum.iredmail.org/
 
 ---
 
@@ -254,11 +347,19 @@ npm run dev
 
 ---
 
-## 🚀 Solution Alternative : Service SMTP tiers (Plus simple)
+## 🚀 Solution Alternative : Service SMTP tiers (RECOMMANDÉ pour la plupart)
 
-Si la configuration d'un serveur mail est trop complexe, utilisez un service tiers :
+**Pourquoi c'est souvent la meilleure option :**
+- ✅ Pas de configuration serveur complexe
+- ✅ Fonctionne sur n'importe quelle distribution
+- ✅ Haute délivrabilité (réputation IP garantie)
+- ✅ Statistiques et monitoring inclus
+- ✅ Pas de gestion de serveur mail
+- ✅ Support technique disponible
 
-### SendGrid (12 000 emails/mois gratuits)
+Si la configuration d'un serveur mail est trop complexe ou si votre VPS n'est pas sous Ubuntu 22.04, utilisez un service tiers :
+
+### SendGrid (12 000 emails/mois gratuits) ⭐ RECOMMANDÉ
 
 ```bash
 # S'inscrire sur https://sendgrid.com

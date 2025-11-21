@@ -117,7 +117,7 @@ export default async function Home() {
                   className="btn-gold text-lg h-14 px-8 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
                   asChild
                 >
-                  <Link href="/boutique">
+                  <Link href="/livre">
                     Explorer la boutique
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
@@ -240,7 +240,7 @@ export default async function Home() {
                 className="btn-royal-blue shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
                 asChild
               >
-                <Link href="/boutique">
+                <Link href="/livre">
                   Voir tous les livres
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
@@ -425,7 +425,7 @@ export default async function Home() {
                 className="btn-gold text-lg h-14 px-10 shadow-2xl hover:shadow-3xl transform hover:-translate-y-0.5 transition-all duration-200"
                 asChild
               >
-                <Link href="/boutique">
+                <Link href="/livre">
                   Commencer maintenant
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>

@@ -170,6 +170,45 @@ vercel
 
 📖 **Documentation des scripts**: [DEPLOYMENT-SCRIPTS.md](./DEPLOYMENT-SCRIPTS.md)
 
+## 🔄 Migration Base de Données
+
+Deux méthodes pour migrer vos données locales vers le VPS :
+
+### Méthode 1: Script Shell Automatisé (Recommandé)
+
+```bash
+# Migration complète en une commande
+./migrate-db-to-vps.sh
+
+# Ou via npm
+npm run db:export
+```
+
+Ce script interactif gère :
+- Export de la base de données locale
+- Compression et transfert vers le VPS
+- Import automatique sur le serveur distant
+- Vérification de l'intégrité des données
+
+### Méthode 2: Script Prisma TypeScript
+
+```bash
+# Configurer les URLs dans .env
+SOURCE_DATABASE_URL="mysql://user:pass@localhost:3306/royaledition"
+TARGET_DATABASE_URL="mysql://user:pass@vps_ip:3306/royaledition"
+
+# Exécuter la migration
+npm run db:migrate-to-vps
+```
+
+Cette méthode offre :
+- Migration granulaire par table
+- Gestion des relations (commandes → items)
+- Barres de progression en temps réel
+- Upserts pour éviter les doublons
+
+📖 **Guide complet**: [docs/DATABASE-MIGRATION.md](./docs/DATABASE-MIGRATION.md)
+
 ## 📚 Documentation
 
 - 📘 [Guide de Déploiement VPS Neuf](./DEPLOYMENT-VPS.md) - Installation complète étape par étape

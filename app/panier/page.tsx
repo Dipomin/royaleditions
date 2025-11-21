@@ -25,7 +25,7 @@ export default function CartPage() {
             Découvrez notre collection de livres et ajoutez vos favoris
           </p>
           <Button size="lg" className="btn-royal-blue" asChild>
-            <Link href="/boutique">
+            <Link href="/livre">
               Explorer la boutique
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
@@ -53,7 +53,7 @@ export default function CartPage() {
               className="bg-white rounded-lg shadow-sm p-6 flex gap-6"
             >
               <Link
-                href={`/boutique/${item.slug}`}
+                href={`/livre/${item.slug}`}
                 className="relative w-24 h-32 shrink-0"
               >
                 <Image
@@ -66,7 +66,7 @@ export default function CartPage() {
 
               <div className="flex-1 flex flex-col justify-between">
                 <div>
-                  <Link href={`/boutique/${item.slug}`}>
+                  <Link href={`/livre/${item.slug}`}>
                     <h3 className="font-heading text-lg font-semibold hover:text-royal-blue transition-colors line-clamp-2">
                       {item.title}
                     </h3>
@@ -143,7 +143,7 @@ export default function CartPage() {
             </Button>
 
             <Button size="lg" variant="outline" className="w-full mt-3" asChild>
-              <Link href="/boutique">Continuer mes achats</Link>
+              <Link href="/livre">Continuer mes achats</Link>
             </Button>
 
             <div className="mt-6 p-4 bg-gold/10 rounded-lg">

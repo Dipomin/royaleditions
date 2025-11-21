@@ -88,7 +88,7 @@ export default async function BookPage({ params }: BookPageProps) {
     },
     offers: {
       "@type": "Offer",
-      url: `${baseUrl}/boutique/${book.slug}`,
+      url: `${baseUrl}/livre/${book.slug}`,
       priceCurrency: "XOF",
       price: book.price.toNumber(),
       availability:
@@ -149,15 +149,15 @@ export default async function BookPage({ params }: BookPageProps) {
 
       <div className="container-custom pb-10 mx-4">
         {/* Book title */}
-            <div className="text-md text-gray-600 mb-8 lg:max-w-7xl mx-auto">
-              <Badge className="mb-3">{book.category.name}</Badge>
-              <h1 className="font-heading lg:text-6xl text-4xl font-bold text-royal-blue mb-2">
-                {book.title}
-              </h1>
-              {book.author && (
-                <p className="text-md italic text-gray-600">Par {book.author}</p>
-              )}
-            </div>
+        <div className="text-md text-gray-600 mb-8 lg:max-w-7xl mx-auto">
+          <Badge className="mb-3">{book.category.name}</Badge>
+          <h1 className="font-heading lg:text-6xl text-4xl font-bold text-royal-blue mb-2">
+            {book.title}
+          </h1>
+          {book.author && (
+            <p className="text-md italic text-gray-600">Par {book.author}</p>
+          )}
+        </div>
 
         {/* Breadcrumb */}
         <div className="text-sm text-gray-600 mb-8 lg:max-w-7xl mx-auto">
@@ -197,8 +197,6 @@ export default async function BookPage({ params }: BookPageProps) {
 
           {/* Details */}
           <div className="space-y-6">
-            
-
             <div className="flex items-baseline space-x-3">
               <span className="text-4xl font-bold text-royal-blue">
                 {Number(book.price).toLocaleString("fr-FR")} FCFA
@@ -276,7 +274,7 @@ export default async function BookPage({ params }: BookPageProps) {
             Description
           </h2>
           <div
-            className="prose prose-lg max-w-none text-gray-700"
+            className="rich-content"
             dangerouslySetInnerHTML={{ __html: book.description }}
           />
         </div>

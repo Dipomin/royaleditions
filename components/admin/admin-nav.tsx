@@ -11,6 +11,7 @@ import {
   FolderOpen,
   MessageCircle,
   Scale,
+  Tag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +19,7 @@ const navigation = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { name: "Livres", href: "/admin/livres", icon: BookOpen },
   { name: "Commandes", href: "/admin/commandes", icon: ShoppingCart },
+  { name: "Codes promo", href: "/admin/promo", icon: Tag },
   { name: "Chat", href: "/admin/chat", icon: MessageCircle },
   { name: "Blog", href: "/admin/blog", icon: FileText },
   { name: "Catégories", href: "/admin/categories", icon: FolderOpen },
