@@ -37,7 +37,15 @@ export function ChatAdminClient() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const pollingInterval = useRef<NodeJS.Timeout | null>(null);
 
-  
+  // Auto-scroll vers le bas
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   // Charger les conversations
   const fetchConversations = useCallback(async () => {
     try {
@@ -109,6 +117,11 @@ export function ChatAdminClient() {
     setIsLoading(true);
 
     try {
+      console.log("Admin envoi message:", {
+        conversationId: selectedConversation.id,
+        messageText,
+      });
+
       const response = await fetch(
         `/api/chat/conversations/${selectedConversation.id}/messages`,
         {
@@ -122,13 +135,22 @@ export function ChatAdminClient() {
         }
       );
 
-      if (response.ok) {
-        const newMessage = await response.json();
-        setMessages((prev) => [...prev, newMessage]);
-        fetchConversations(); // Mettre à jour la liste
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Erreur lors de l'envoi:", errorData);
+        throw new Error(errorData.error || "Erreur d'envoi");
       }
+
+      const newMessage = await response.json();
+      console.log("Message admin envoyé:", newMessage);
+
+      setMessages((prev) => [...prev, newMessage]);
+      fetchConversations(); // Mettre à jour la liste
     } catch (error) {
       console.error("Error sending message:", error);
+      // Restaurer le message en cas d'erreur
+      setInputValue(messageText);
+      alert("Erreur lors de l'envoi du message. Veuillez réessayer.");
     } finally {
       setIsLoading(false);
     }

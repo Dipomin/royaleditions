@@ -62,7 +62,10 @@ export function LiveChatWidget() {
   // Initialiser ou récupérer la conversation
   const initializeConversation = useCallback(async () => {
     const visitorId = getVisitorId();
-    if (!visitorId) return;
+    if (!visitorId) {
+      console.error("Impossible de générer un ID visiteur");
+      return;
+    }
 
     try {
       const response = await fetch("/api/chat/conversations", {
@@ -71,28 +74,33 @@ export function LiveChatWidget() {
         body: JSON.stringify({ visitorId }),
       });
 
-      if (response.ok) {
-        const conversation = await response.json();
-        setConversationId(conversation.id);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Erreur serveur:", errorData);
+        throw new Error(errorData.error || "Erreur lors de l'initialisation");
+      }
 
-        // Charger les messages existants
-        if (conversation.messages && conversation.messages.length > 0) {
-          setMessages(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            conversation.messages.map((msg: any) => ({
-              id: msg.id,
-              text: msg.text,
-              sender: msg.sender,
-              senderName: msg.senderName,
-              createdAt: new Date(msg.createdAt),
-            }))
-          );
-        } else {
-          // Message de bienvenue automatique si nouvelle conversation
-          setTimeout(() => {
-            sendWelcomeMessage();
-          }, 1000);
-        }
+      const conversation = await response.json();
+      console.log("Conversation initialisée:", conversation);
+      setConversationId(conversation.id);
+
+      // Charger les messages existants
+      if (conversation.messages && conversation.messages.length > 0) {
+        setMessages(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          conversation.messages.map((msg: any) => ({
+            id: msg.id,
+            text: msg.text,
+            sender: msg.sender,
+            senderName: msg.senderName,
+            createdAt: new Date(msg.createdAt),
+          }))
+        );
+      } else {
+        // Message de bienvenue automatique si nouvelle conversation
+        setTimeout(() => {
+          sendWelcomeMessage();
+        }, 1000);
       }
     } catch (error) {
       console.error("Error initializing conversation:", error);
@@ -162,6 +170,8 @@ export function LiveChatWidget() {
     setIsLoading(true);
 
     try {
+      console.log("Envoi du message:", { conversationId, messageText });
+
       const response = await fetch(
         `/api/chat/conversations/${conversationId}/messages`,
         {
@@ -175,21 +185,30 @@ export function LiveChatWidget() {
         }
       );
 
-      if (response.ok) {
-        const newMessage = await response.json();
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: newMessage.id,
-            text: newMessage.text,
-            sender: newMessage.sender,
-            senderName: newMessage.senderName,
-            createdAt: new Date(newMessage.createdAt),
-          },
-        ]);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Erreur lors de l'envoi:", errorData);
+        throw new Error(errorData.error || "Erreur d'envoi");
       }
+
+      const newMessage = await response.json();
+      console.log("Message envoyé:", newMessage);
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: newMessage.id,
+          text: newMessage.text,
+          sender: newMessage.sender,
+          senderName: newMessage.senderName,
+          createdAt: new Date(newMessage.createdAt),
+        },
+      ]);
     } catch (error) {
       console.error("Error sending message:", error);
+      // Restaurer le message en cas d'erreur
+      setInputValue(messageText);
+      alert("Erreur lors de l'envoi du message. Veuillez réessayer.");
     } finally {
       setIsLoading(false);
     }
@@ -204,7 +223,7 @@ export function LiveChatWidget() {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="fixed bottom-6 right-6 z-100"
+            className="fixed bottom-6 right-6 z-9999"
           >
             <Button
               onClick={() => {
@@ -241,7 +260,7 @@ export function LiveChatWidget() {
             }}
             exit={{ opacity: 0, y: 100, scale: 0.8 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-6 right-6 w-[380px] bg-white rounded-2xl shadow-2xl z-100 flex flex-col overflow-hidden border border-gray-200"
+            className="fixed bottom-6 right-6 w-[380px] bg-white rounded-2xl shadow-2xl z-9999 flex flex-col overflow-hidden border border-gray-200"
           >
             {/* Header */}
             <div className="bg-linear-to-r from-royal-blue to-royal-blue-light p-4 flex items-center justify-between">
