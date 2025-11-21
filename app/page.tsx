@@ -89,7 +89,7 @@ export default async function Home() {
         <div className="absolute top-20 left-10 w-20 h-20 bg-gold/20 rounded-full blur-xl animate-float"></div>
         <div className="absolute bottom-20 right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl animate-float-delayed"></div>
 
-        <div className="container-custom relative z-10 py-20">
+        <div className="container-custom relative z-10 py-20 mx-4 lg:mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 text-white animate-fade-in-up">
               <div className="inline-block">
@@ -147,7 +147,7 @@ export default async function Home() {
       </section>
 
       {/* Features - Améliorées */}
-      <section className="py-20 bg-linear-to-b from-gray-50 to-white lg:max-w-7xl mx-auto">
+      <section className="py-20 bg-linear-to-b from-gray-50 to-white lg:max-w-7xl mx-4 lg:mx-auto">
         <div className="container-custom">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="group flex items-start space-x-4 p-8 bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-gold/30 transform hover:-translate-y-1">
@@ -196,7 +196,7 @@ export default async function Home() {
       </section>
 
       {/* Trust Badges - Statistiques de satisfaction */}
-      <section className="py-16 lg:max-w-7xl mx-auto">
+      <section className="py-16 lg:max-w-7xl mx-4 lg:mx-auto">
         <div className="container-custom">
           <TrustBadges />
         </div>
@@ -204,7 +204,7 @@ export default async function Home() {
 
       {/* Featured Books - Amélioré */}
       {featuredBooks.length > 0 && (
-        <section className="py-24 bg-white lg:max-w-7xl mx-auto">
+        <section className="py-24 bg-white lg:max-w-7xl mx-4 lg:mx-auto">
           <div className="container-custom">
             <div className="text-center mb-16 space-y-4 animate-fade-in-up">
               <div className="inline-block">
@@ -404,7 +404,7 @@ export default async function Home() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-gold/20 rounded-full blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
 
-        <div className="container-custom text-center relative z-10">
+        <div className="container-custom text-center relative z-10 mx-4 lg:mx-auto">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="inline-block">
               <span className="bg-gold/20 text-gold px-4 py-2 rounded-full text-sm font-semibold backdrop-blur-sm border border-gold/30">

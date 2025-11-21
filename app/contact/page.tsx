@@ -1,17 +1,62 @@
-import { Metadata } from "next";
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { contactSchema } from "@/lib/validations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, MapPin, Clock, Loader2, CheckCircle } from "lucide-react";
+import { toast } from "sonner";
+import { z } from "zod";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: "Contactez-nous pour toute question ou demande d'information",
-};
+type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema),
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    setIsSubmitting(true);
+    setIsSuccess(false);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Erreur lors de l'envoi");
+      }
+
+      setIsSuccess(true);
+      toast.success("Message envoyé avec succès!");
+      reset();
+
+      // Réinitialiser le message de succès après 5 secondes
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (error) {
+      console.error("Contact form error:", error);
+      toast.error("Erreur lors de l'envoi. Veuillez réessayer.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <div className="container-custom py-20">
       <div className="max-w-5xl mx-auto">
@@ -44,7 +89,9 @@ export default function ContactPage() {
                     </p>
                   </div>
                 </div>
-
+                {/**
+             * 
+             * 
                 <div className="flex items-start space-x-3">
                   <Phone className="h-6 w-6 text-gold shrink-0 mt-1" />
                   <div>
@@ -52,6 +99,7 @@ export default function ContactPage() {
                     <p className="text-gray-600 text-sm">+225 00 00 00 00 00</p>
                   </div>
                 </div>
+             */}
 
                 <div className="flex items-start space-x-3">
                   <Mail className="h-6 w-6 text-gold shrink-0 mt-1" />
@@ -98,13 +146,37 @@ export default function ContactPage() {
                 Envoyez-nous un message
               </h2>
 
-              <form className="space-y-6">
+              {isSuccess && (
+                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start space-x-3">
+                  <CheckCircle className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-green-800">
+                      Message envoyé avec succès !
+                    </p>
+                    <p className="text-sm text-green-700 mt-1">
+                      Nous vous répondrons dans les plus brefs délais.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="name">
                       Nom complet <span className="text-red-500">*</span>
                     </Label>
-                    <Input id="name" placeholder="Votre nom" required />
+                    <Input
+                      id="name"
+                      {...register("name")}
+                      placeholder="Votre nom"
+                      disabled={isSubmitting}
+                    />
+                    {errors.name && (
+                      <p className="text-sm text-red-500">
+                        {errors.name.message}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -114,20 +186,37 @@ export default function ContactPage() {
                     <Input
                       id="email"
                       type="email"
+                      {...register("email")}
                       placeholder="votre@email.com"
-                      required
+                      disabled={isSubmitting}
                     />
+                    {errors.email && (
+                      <p className="text-sm text-red-500">
+                        {errors.email.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Téléphone</Label>
+                  <Label htmlFor="phone">Téléphone (optionnel)</Label>
                   <div className="flex gap-2">
                     <span className="inline-flex items-center px-3 rounded-md border border-gray-300 bg-gray-50 text-sm font-medium text-gray-700">
                       +225
                     </span>
-                    <Input id="phone" placeholder="0123456789" maxLength={10} />
+                    <Input
+                      id="phone"
+                      {...register("phone")}
+                      placeholder="0123456789"
+                      maxLength={10}
+                      disabled={isSubmitting}
+                    />
                   </div>
+                  {errors.phone && (
+                    <p className="text-sm text-red-500">
+                      {errors.phone.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -136,9 +225,15 @@ export default function ContactPage() {
                   </Label>
                   <Input
                     id="subject"
+                    {...register("subject")}
                     placeholder="Objet de votre message"
-                    required
+                    disabled={isSubmitting}
                   />
+                  {errors.subject && (
+                    <p className="text-sm text-red-500">
+                      {errors.subject.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -147,14 +242,32 @@ export default function ContactPage() {
                   </Label>
                   <Textarea
                     id="message"
+                    {...register("message")}
                     placeholder="Votre message..."
                     rows={6}
-                    required
+                    disabled={isSubmitting}
                   />
+                  {errors.message && (
+                    <p className="text-sm text-red-500">
+                      {errors.message.message}
+                    </p>
+                  )}
                 </div>
 
-                <Button type="submit" size="lg" className="w-full btn-gold">
-                  Envoyer le message
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full btn-gold"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Envoi en cours...
+                    </>
+                  ) : (
+                    "Envoyer le message"
+                  )}
                 </Button>
               </form>
             </Card>

@@ -42,7 +42,7 @@ export function Footer() {
 
   return (
     <footer className="bg-royal-blue text-white">
-      <div className="container-custom py-16 lg:max-w-7xl mx-auto">
+      <div className="container-custom py-16 lg:max-w-7xl mx-4 lg:mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="space-y-4">

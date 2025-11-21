@@ -31,6 +31,9 @@ export const orderSchema = z.object({
   shippingArea: z.string().min(2, 'Le quartier est requis'),
   shippingAddress: z.string().min(5, 'L\'adresse complète est requise'),
   observations: z.string().optional(),
+  acceptCGV: z.boolean().refine((val) => val === true, {
+    message: 'Vous devez accepter les conditions générales de vente',
+  }),
 })
 
 export const blogPostSchema = z.object({
@@ -50,4 +53,12 @@ export const testimonialSchema = z.object({
   content: z.string().min(10, 'Le contenu doit contenir au moins 10 caractères'),
   rating: z.number().int().min(1).max(5),
   active: z.boolean().default(true),
+})
+
+export const contactSchema = z.object({
+  name: z.string().min(2, 'Le nom doit contenir au moins 2 caractères'),
+  email: z.string().email('Email invalide'),
+  phone: z.string().regex(/^[0-9]{10}$/, 'Le numéro doit contenir exactement 10 chiffres').optional().or(z.literal('')),
+  subject: z.string().min(3, 'Le sujet doit contenir au moins 3 caractères'),
+  message: z.string().min(10, 'Le message doit contenir au moins 10 caractères'),
 })

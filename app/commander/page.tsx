@@ -89,7 +89,7 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="container-custom py-20 lg:max-w-7xl mx-auto">
+    <div className="container-custom py-20 lg:max-w-7xl mx-4 lg:mx-auto">
       <h1 className="font-heading text-4xl font-bold text-royal-blue mb-8">
         Finaliser la commande
       </h1>
@@ -221,6 +221,34 @@ export default function CheckoutPage() {
                   placeholder="Instructions spéciales de livraison..."
                   rows={3}
                 />
+              </div>
+
+              {/* CGV Acceptance */}
+              <div className="space-y-2">
+                <div className="flex items-start space-x-3">
+                  <input
+                    type="checkbox"
+                    id="acceptCGV"
+                    {...register("acceptCGV")}
+                    className="h-4 w-4 mt-1 text-royal-blue rounded border-gray-300 focus:ring-royal-blue"
+                  />
+                  <Label htmlFor="acceptCGV" className="cursor-pointer text-sm">
+                    J&apos;accepte les{" "}
+                    <Link
+                      href="/conditions-generales"
+                      target="_blank"
+                      className="text-royal-blue hover:text-gold underline"
+                    >
+                      conditions générales de vente
+                    </Link>{" "}
+                    <span className="text-red-500">*</span>
+                  </Label>
+                </div>
+                {errors.acceptCGV && (
+                  <p className="text-sm text-red-500">
+                    {errors.acceptCGV.message}
+                  </p>
+                )}
               </div>
 
               <Button

@@ -74,7 +74,7 @@ export function BlogPostForm() {
 
   return (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit as any)} className="space-y-6 max-w-7xl mx-auto">
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <Card className="p-6 space-y-4">

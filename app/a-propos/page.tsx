@@ -28,7 +28,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-20 lg:max-w-7xl mx-auto">
+      <section className="py-20 lg:max-w-7xl mx-4 lg:mx-auto">
         <div className="container-custom">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative h-[500px] rounded-lg overflow-hidden">

@@ -147,7 +147,18 @@ export default async function BookPage({ params }: BookPageProps) {
       {/* Barre de produit flottante */}
       <StickyProductBar book={bookForCart} />
 
-      <div className="container-custom py-20">
+      <div className="container-custom pb-10 mx-4">
+        {/* Book title */}
+            <div className="text-md text-gray-600 mb-8 lg:max-w-7xl mx-auto">
+              <Badge className="mb-3">{book.category.name}</Badge>
+              <h1 className="font-heading lg:text-6xl text-4xl font-bold text-royal-blue mb-2">
+                {book.title}
+              </h1>
+              {book.author && (
+                <p className="text-md italic text-gray-600">Par {book.author}</p>
+              )}
+            </div>
+
         {/* Breadcrumb */}
         <div className="text-sm text-gray-600 mb-8 lg:max-w-7xl mx-auto">
           Accueil / Boutique / {book.category.name} / {book.title}
@@ -186,15 +197,7 @@ export default async function BookPage({ params }: BookPageProps) {
 
           {/* Details */}
           <div className="space-y-6">
-            <div>
-              <Badge className="mb-3">{book.category.name}</Badge>
-              <h1 className="font-heading text-4xl font-bold text-royal-blue mb-2">
-                {book.title}
-              </h1>
-              {book.author && (
-                <p className="text-lg text-gray-600">Par {book.author}</p>
-              )}
-            </div>
+            
 
             <div className="flex items-baseline space-x-3">
               <span className="text-4xl font-bold text-royal-blue">

@@ -48,8 +48,9 @@ npx prisma studio        # Visual database browser
 4. Run `npx prisma db push` (no migrations - direct schema sync)
 
 ### Deployment
-- **VPS**: PM2 config at `ecosystem.config.js` - see `DEPLOYMENT-EXISTING-VPS.md` or `QUICK-START-VPS.md`
+- **VPS**: PM2 config at `ecosystem.config.js` runs in cluster mode with auto-restart (max 10 restarts, min 10s uptime, 1GB memory limit)
 - **Vercel**: Add `SKIP_ENV_VALIDATION=true` for build, configure MySQL via PlanetScale/Railway
+- **Images**: S3 domains must be added to `next.config.ts` remotePatterns (see existing eu-north-1 pattern)
 - Images require S3 configuration in production (local files won't persist on Vercel)
 
 ## Styling System
@@ -87,6 +88,7 @@ Always import from `lib/prisma.ts`, never instantiate new `PrismaClient()`:
 ```typescript
 import { prisma } from '@/lib/prisma'  // ✓ Correct
 ```
+The singleton uses `globalThis` caching to prevent multiple instances in development (hot reload safe).
 
 ### 3. Clerk Admin Protection
 - Admin pages MUST be under `/app/admin/*` (auto-protected by middleware)
@@ -151,7 +153,24 @@ export async function POST(request: NextRequest) {
 - **"Module not found @/"**: Check `tsconfig.json` paths config
 - **Prisma client not generated**: Run `npx prisma generate`
 - **Clerk errors in admin**: Ensure `ClerkProvider` wraps admin layout with `frFR` locale
-- **Image domains**: Add S3/CloudFront domains to `next.config.ts` images.domains
+- **Image domains**: Add S3/CloudFront domains to `next.config.ts` remotePatterns array (see existing pattern for eu-north-1)
+
+## Error Handling Patterns
+
+All API routes follow consistent error handling:
+```typescript
+try {
+  // Logic here
+  return NextResponse.json(data)
+} catch (error) {
+  console.error('Context-specific error message:', error)
+  return NextResponse.json(
+    { error: 'User-friendly French error message' },
+    { status: 500 }
+  )
+}
+```
+Always log errors with context and return French-language user messages.
 
 ## Project-Specific Conventions
 

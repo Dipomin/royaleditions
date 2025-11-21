@@ -10,6 +10,7 @@ import {
   FileText,
   FolderOpen,
   MessageCircle,
+  Scale,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ const navigation = [
   { name: "Chat", href: "/admin/chat", icon: MessageCircle },
   { name: "Blog", href: "/admin/blog", icon: FileText },
   { name: "Catégories", href: "/admin/categories", icon: FolderOpen },
+  { name: "Pages légales", href: "/admin/legal", icon: Scale },
 ];
 
 export function AdminNav() {

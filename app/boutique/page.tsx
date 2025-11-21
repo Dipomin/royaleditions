@@ -53,7 +53,7 @@ export default async function ShopPage() {
   }));
 
   return (
-    <div className="container-custom py-20 lg:max-w-7xl mx-auto">
+    <div className="container-custom py-20 lg:max-w-7xl mx-4 lg:mx-auto">
       <div className="mb-12">
         <h1 className="font-heading text-5xl font-bold text-royal-blue mb-4">
           Notre boutique
