@@ -126,16 +126,11 @@ export function Footer() {
                   Abidjan, Côte d&apos;Ivoire
                 </span>
               </li>
-              <li className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-gold shrink-0" />
-                <span className="text-sm text-gray-300">
-                  +225 00 00 00 00 00
-                </span>
-              </li>
+             
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-gold shrink-0" />
                 <span className="text-sm text-gray-300">
-                  contact@royaleditions.ci
+                  contact@royaleditions.com
                 </span>
               </li>
             </ul>

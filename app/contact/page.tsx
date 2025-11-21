@@ -106,7 +106,7 @@ export default function ContactPage() {
                   <div>
                     <p className="font-semibold text-royal-blue">Email</p>
                     <p className="text-gray-600 text-sm">
-                      contact@royaleditions.ci
+                      contact@royaleditions.com
                     </p>
                   </div>
                 </div>

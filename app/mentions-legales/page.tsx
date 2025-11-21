@@ -15,22 +15,14 @@ export default function MentionsLegalesPage() {
             <br />
             Abidjan, Côte d&apos;Ivoire
             <br />
-            Téléphone : +225 00 00 00 00 00
             <br />
-            Email : contact@royaleditions.ci
+            Email : contact@royaleditions.com
           </p>
 
           <h2>Directeur de la publication</h2>
           <p>Royal Editions</p>
 
-          <h2>Hébergement</h2>
-          <p>
-            Ce site est hébergé par :
-            <br />
-            [Nom de l&apos;hébergeur]
-            <br />
-            [Adresse de l&apos;hébergeur]
-          </p>
+          
 
           <h2>Propriété intellectuelle</h2>
           <p>
@@ -85,9 +77,7 @@ export default function MentionsLegalesPage() {
             Pour toute question ou réclamation, vous pouvez nous contacter :
           </p>
           <ul>
-            <li>Par email : contact@royaleditions.ci</li>
-            <li>Par téléphone : +225 00 00 00 00 00</li>
-            <li>Par courrier : Royal Editions, Abidjan, Côte d&apos;Ivoire</li>
+            <li>Par email : contact@royaleditions.com</li>
           </ul>
         </div>
       </Card>
