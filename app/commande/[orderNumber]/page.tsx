@@ -2,17 +2,11 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PurchaseTracker } from "@/components/marketing/purchase-tracker";
+import { PrintButton } from "@/components/order/print-button";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  CheckCircle,
-  Package,
-  MapPin,
-  Phone,
-  Mail,
-  Printer,
-} from "lucide-react";
+import { CheckCircle, Package, MapPin, Phone, Mail } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -299,15 +293,7 @@ export default async function OrderConfirmationPage({
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => window.print()}
-            className="gap-2"
-          >
-            <Printer className="h-5 w-5" />
-            Imprimer la facture
-          </Button>
+          <PrintButton />
           <Button size="lg" className="btn-royal-blue" asChild>
             <Link href="/livre">Continuer mes achats</Link>
           </Button>

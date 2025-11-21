@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { DirectOrderForm } from "@/components/books/direct-order-form";
 import { ProductViewTracker } from "@/components/marketing/product-view-tracker";
 import {
-  Package,
   Truck,
   Shield,
   TrendingUp,
@@ -103,9 +102,9 @@ export default async function BookDirectOrderPage({ params }: BookPageProps) {
           )}
         </div>
 
-        <div className="container-custom py-6 lg:py-12">
+        <div className="container-custom py-6 lg:py-12 ">
           {/* Breadcrumb (desktop uniquement) */}
-          <div className="hidden lg:block text-sm text-gray-600 mb-6">
+          <div className="hidden lg:block text-sm text-gray-600 mb-6 lg:mx-auto text-center">
             <Link href="/" className="hover:text-royal-blue">
               Accueil
             </Link>{" "}
