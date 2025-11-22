@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Loader2, Plus, Minus, Tag, X } from "lucide-react";
+import { Loader2, Plus, Minus, Tag, X, ShoppingBag } from "lucide-react";
 
 // Schéma de validation simplifié pour commande directe
 const directOrderSchema = z.object({
@@ -463,7 +463,10 @@ export function DirectOrderForm({ book }: DirectOrderFormProps) {
             Validation en cours...
           </>
         ) : (
-          `Valider la commande - ${total.toLocaleString("fr-FR")} FCFA`
+          <>
+            <ShoppingBag className="mr-2 h-5 w-5" />
+            Valider la commande | {total.toLocaleString("fr-FR")} FCFA
+          </>
         )}
       </Button>
 

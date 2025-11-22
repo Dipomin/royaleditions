@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { sendOrderNotificationEmail } from '@/lib/email'
 
 export async function POST(request: NextRequest) {
   try {
@@ -57,6 +58,31 @@ export async function POST(request: NextRequest) {
         },
       })
     }
+
+    // Envoyer l'email de notification (ne pas bloquer la réponse si l'email échoue)
+    sendOrderNotificationEmail({
+      orderNumber: order.orderNumber,
+      customerName: order.customerName,
+      customerEmail: order.customerEmail,
+      customerPhone: order.customerPhone,
+      shippingCity: order.shippingCity,
+      shippingArea: order.shippingArea,
+      shippingAddress: order.shippingAddress,
+      observations: order.observations,
+      totalAmount: parseFloat(order.totalAmount.toString()),
+      items: order.items.map((item) => ({
+        book: {
+          title: item.book.title,
+          price: parseFloat(item.book.price.toString()),
+        },
+        quantity: item.quantity,
+        price: parseFloat(item.price.toString()),
+      })),
+      createdAt: order.createdAt,
+    }).catch((error) => {
+      console.error('Erreur lors de l\'envoi de l\'email de notification:', error)
+      // On ne fait pas échouer la commande si l'email échoue
+    })
     
     return NextResponse.json(order, { status: 201 })
   } catch (error) {
