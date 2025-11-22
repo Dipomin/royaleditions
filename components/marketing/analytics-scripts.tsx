@@ -19,7 +19,7 @@ export function AnalyticsScripts({
   const gaId =
     googleAnalyticsId ||
     process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ||
-    "G-XXXXXXXXXX";
+    "G-H3QZZHDCPQ";
 
   return (
     <>
