@@ -470,3 +470,17 @@
   animation: float-delayed 7s ease-in-out infinite;
   animation-delay: 0.5s;
 }
+
+/* Animation marquee pour Black Friday */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}

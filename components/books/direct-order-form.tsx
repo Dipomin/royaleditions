@@ -413,7 +413,7 @@ export function DirectOrderForm({ book }: DirectOrderFormProps) {
           {/* Ville */}
           <div>
             <Label htmlFor="shippingCity" className="text-sm font-medium">
-              Ville ou commune <span className="text-red-500">*</span>
+              Adresse de livraison <span className="text-red-500">*</span>
             </Label>
             <Input
               id="shippingCity"
