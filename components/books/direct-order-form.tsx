@@ -465,7 +465,7 @@ export function DirectOrderForm({ book }: DirectOrderFormProps) {
         ) : (
           <>
             <ShoppingBag className="mr-2 h-5 w-5" />
-            Valider la commande | {total.toLocaleString("fr-FR")} FCFA
+            Valider la commande 
           </>
         )}
       </Button>
