@@ -246,13 +246,13 @@ export default async function BookDirectOrderPage({ params }: BookPageProps) {
 
                 <div className="flex items-baseline gap-3 mb-2">
                   <span className="text-4xl font-bold text-red-600">
-                    {Math.round(Number(book.price) * 0.8).toLocaleString(
+                    {Math.round(Number(book.price)).toLocaleString(
                       "fr-FR"
                     )}{" "}
                     FCFA
                   </span>
                   <span className="text-xl text-gray-400 line-through">
-                    {Number(book.price).toLocaleString("fr-FR")} FCFA
+                    {Number(book.originalPrice).toLocaleString("fr-FR")} FCFA
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-3">
@@ -261,7 +261,7 @@ export default async function BookDirectOrderPage({ params }: BookPageProps) {
                   </span>
                   <span className="text-green-600 font-medium text-sm">
                     Économisez{" "}
-                    {Math.round(Number(book.price) * 0.2).toLocaleString(
+                    {Math.round(Number(book.originalPrice) * 0.2).toLocaleString(
                       "fr-FR"
                     )}{" "}
                     FCFA
@@ -334,7 +334,7 @@ export default async function BookDirectOrderPage({ params }: BookPageProps) {
                   <h2 className="font-heading text-lg font-semibold text-royal-blue mb-3">
                     À propos de ce livre
                   </h2>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-gray-700 text-2xl font-black leading-relaxed">
                     {book.summary}
                   </p>
                 </div>
