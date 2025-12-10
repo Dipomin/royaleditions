@@ -82,15 +82,7 @@ export function BookCard({ book }: BookCardProps) {
             Nouveauté
           </Badge>
         )}
-        {hasDiscount && (
-          <Badge variant="destructive" className="font-semibold">
-            -
-            {Math.round(
-              ((book.originalPrice! - book.price) / book.originalPrice!) * 100
-            )}
-            %
-          </Badge>
-        )}
+        
       </div>
 
       {/* Image */}
@@ -147,11 +139,7 @@ export function BookCard({ book }: BookCardProps) {
             <span className="text-xl font-bold text-royal-blue">
               {book.price.toLocaleString("fr-FR")} FCFA
             </span>
-            {hasDiscount && (
-              <span className="text-sm text-gray-500 line-through">
-                {book.originalPrice!.toLocaleString("fr-FR")} FCFA
-              </span>
-            )}
+           
           </div>
 
           <Button

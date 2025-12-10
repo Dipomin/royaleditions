@@ -92,15 +92,25 @@ export async function listS3Files(
     MaxKeys: maxKeys,
   });
 
-  const response = await s3Client.send(command);
+  try {
+    const response = await s3Client.send(command);
 
-  return (
-    response.Contents?.map((item) => ({
-      key: item.Key || '',
-      size: item.Size || 0,
-      lastModified: item.LastModified || new Date(),
-    })) || []
-  );
+    return (
+      response.Contents?.map((item) => ({
+        key: item.Key || '',
+        size: item.Size || 0,
+        lastModified: item.LastModified || new Date(),
+      })) || []
+    );
+  } catch (error: unknown) {
+    const err = error as { Code?: string };
+    if (err.Code === 'AccessDenied') {
+      console.error('S3 ListBucket permission denied. Veuillez ajouter s3:ListBucket à la politique IAM.');
+      // Retourner un tableau vide au lieu de planter
+      return [];
+    }
+    throw error;
+  }
 }
 
 /**
