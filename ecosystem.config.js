@@ -2,14 +2,14 @@ module.exports = {
   apps: [
     {
       name: 'royaleditions',
-      script: 'npm',
-      args: 'start',
-      cwd: process.cwd(), // Utilise le répertoire courant
-      instances: process.env.PM2_INSTANCES || 'max',
-      exec_mode: 'cluster',
+      script: '.next/standalone/server.js',
+      cwd: process.cwd(),
+      instances: 1, // Mode standalone ne supporte pas le clustering natif
+      exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
-        PORT: process.env.PORT || 3001
+        PORT: process.env.PORT || 3001,
+        HOSTNAME: '0.0.0.0'
       },
       error_file: './logs/err.log',
       out_file: './logs/out.log',

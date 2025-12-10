@@ -2,7 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  output: "standalone",
   images: {
+    unoptimized: true, // Désactiver l'optimisation car on utilise <img /> natif
     remotePatterns: [
       {
         protocol: "https",
