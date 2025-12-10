@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ShoppingCart, Eye } from "lucide-react";
@@ -82,17 +81,15 @@ export function BookCard({ book }: BookCardProps) {
             Nouveauté
           </Badge>
         )}
-        
       </div>
 
       {/* Image */}
       <div className="relative aspect-3/4 overflow-hidden bg-gray-100">
         <Link href={`/livre/${book.slug}`} className="absolute inset-0">
-          <Image
+          <img
             src={mainImage}
             alt={book.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         </Link>
 
@@ -139,7 +136,6 @@ export function BookCard({ book }: BookCardProps) {
             <span className="text-xl font-bold text-royal-blue">
               {book.price.toLocaleString("fr-FR")} FCFA
             </span>
-           
           </div>
 
           <Button

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Plus, Pencil, Trash2, Eye, EyeOff } from "lucide-react";
-import Image from "next/image";
 
 async function getBlogPosts() {
   return prisma.blogPost.findMany({
@@ -74,13 +73,12 @@ export default async function BlogPage() {
                   <tr key={post.id} className="border-b hover:bg-gray-50">
                     <td className="p-4">
                       <div className="relative w-20 h-14">
-                        <Image
+                        <img
                           src={
                             post.coverImage || "/assets/placeholder-blog.jpg"
                           }
                           alt={post.title}
-                          fill
-                          className="object-cover rounded"
+                          className="absolute inset-0 w-full h-full object-cover rounded"
                         />
                       </div>
                     </td>

@@ -1,7 +1,6 @@
 "use client";
 
 import { Star } from "lucide-react";
-import Image from "next/image";
 
 interface Review {
   id: string;
@@ -112,11 +111,10 @@ export function ProductReviews() {
               <div className="shrink-0">
                 {review.avatar ? (
                   <div className="relative w-12 h-12 rounded-full overflow-hidden">
-                    <Image
+                    <img
                       src={review.avatar}
                       alt={review.name}
-                      fill
-                      className="object-cover"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   </div>
                 ) : (

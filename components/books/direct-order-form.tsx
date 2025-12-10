@@ -217,7 +217,7 @@ export function DirectOrderForm({ book }: DirectOrderFormProps) {
       });
 
       // Rediriger vers la page de confirmation
-      router.push(`/commande/${order.orderNumber}`);
+      router.push(`/commande/confirmation`);
       reset();
     } catch (error) {
       console.error("Order creation error:", error);

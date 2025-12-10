@@ -15,7 +15,6 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Loader2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { z } from "zod";
 
 type OrderFormData = z.infer<typeof orderSchema>;
@@ -77,9 +76,34 @@ export default function CheckoutPage() {
 
       const order = await response.json();
 
+      // Stocker les données de la commande pour la page de confirmation statique
+      sessionStorage.setItem(
+        "lastOrder",
+        JSON.stringify({
+          orderNumber: order.orderNumber,
+          customerName: data.customerName,
+          customerEmail: data.customerEmail || null,
+          customerPhone: data.customerPhone,
+          shippingCity: data.shippingCity,
+          shippingArea: data.shippingArea,
+          shippingAddress: data.shippingAddress,
+          observations: data.observations || null,
+          totalAmount: total,
+          items: items.map((item) => ({
+            id: item.id,
+            title: item.title,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image,
+          })),
+        })
+      );
+
       clearCart();
       toast.success("Commande passée avec succès!");
-      router.push(`/commande/${order.orderNumber}`);
+
+      // Redirection immédiate vers la page de confirmation
+      window.location.href = "/commande/confirmation";
     } catch (error) {
       console.error("Order error:", error);
       toast.error("Une erreur est survenue. Veuillez réessayer.");
@@ -281,11 +305,10 @@ export default function CheckoutPage() {
               {items.map((item) => (
                 <div key={item.id} className="flex gap-3">
                   <div className="relative w-16 h-20 shrink-0">
-                    <Image
+                    <img
                       src={item.image}
                       alt={item.title}
-                      fill
-                      className="object-cover rounded"
+                      className="absolute inset-0 w-full h-full object-cover rounded"
                     />
                   </div>
                   <div className="flex-1">

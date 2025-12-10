@@ -8,7 +8,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Package, MapPin, Phone, Mail } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 interface OrderPageProps {
   params: Promise<{ orderNumber: string }>;
@@ -209,11 +208,10 @@ export default async function OrderConfirmationPage({
                   className="flex gap-4 pb-4 border-b last:border-b-0"
                 >
                   <div className="relative w-20 h-28 shrink-0">
-                    <Image
+                    <img
                       src={coverImage}
                       alt={item.book.title}
-                      fill
-                      className="object-cover rounded"
+                      className="absolute inset-0 w-full h-full object-cover rounded"
                     />
                   </div>
                   <div className="flex-1">

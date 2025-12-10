@@ -1,7 +1,6 @@
 "use client";
 
 import { useCart } from "@/lib/store/cart";
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2, ArrowRight, ShoppingBag } from "lucide-react";
@@ -56,11 +55,10 @@ export default function CartPage() {
                 href={`/livre/${item.slug}`}
                 className="relative w-24 h-32 shrink-0"
               >
-                <Image
+                <img
                   src={item.image}
                   alt={item.title}
-                  fill
-                  className="object-cover rounded"
+                  className="absolute inset-0 w-full h-full object-cover rounded"
                 />
               </Link>
 

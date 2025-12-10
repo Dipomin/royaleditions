@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, X } from "lucide-react";
-import Image from "next/image";
 
 interface Purchase {
   id: string;
@@ -121,11 +120,10 @@ export function PurchaseNotification() {
             <div className="flex items-start gap-3 p-4">
               {/* Image du livre */}
               <div className="relative w-16 h-20 shrink-0 rounded-lg overflow-hidden bg-gray-100">
-                <Image
+                <img
                   src={currentNotification.bookImage}
                   alt={currentNotification.bookTitle}
-                  fill
-                  className="object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
               </div>
 

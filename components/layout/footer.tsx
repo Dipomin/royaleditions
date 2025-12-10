@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import {
   Facebook,
   Instagram,
@@ -46,11 +45,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="space-y-4">
-            <Image
+            <img
               src="/assets/Logo-Royal-Editions.png"
               alt="Royal Editions"
-              width={250}
-              height={90}
               className="h-24 w-auto"
             />
             <p className="text-sm text-gray-300 leading-relaxed">
@@ -126,7 +123,7 @@ export function Footer() {
                   Abidjan, Côte d&apos;Ivoire
                 </span>
               </li>
-             
+
               <li className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-gold shrink-0" />
                 <span className="text-sm text-gray-300">

@@ -3,7 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Plus, Pencil, Trash2 } from "lucide-react";
-import Image from "next/image";
 import { parseBookImages } from "@/lib/utils/parse-images";
 
 async function getBooks() {
@@ -94,11 +93,10 @@ export default async function BooksPage() {
                       <td className="p-4">
                         <div className="relative w-16 h-20 bg-gray-200 rounded flex items-center justify-center">
                           {hasValidImage ? (
-                            <Image
+                            <img
                               src={coverImage}
                               alt={book.title}
-                              fill
-                              className="object-cover rounded"
+                              className="absolute inset-0 w-full h-full object-cover rounded"
                             />
                           ) : (
                             <svg

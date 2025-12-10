@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import Image from "next/image";
 import { BookCard } from "@/components/books/book-card";
 import { AddToCartButton } from "@/components/books/add-to-cart-button";
 import { StickyProductBar } from "@/components/books/sticky-product-bar";
@@ -168,12 +167,10 @@ export default async function BookPage({ params }: BookPageProps) {
           {/* Images */}
           <div className="space-y-4">
             <div className="relative aspect-3/4 rounded-lg overflow-hidden bg-gray-100">
-              <Image
+              <img
                 src={images[0] || "/placeholder-book.png"}
                 alt={book.title}
-                fill
-                className="object-cover"
-                priority
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
             {images.length > 1 && (
@@ -183,11 +180,10 @@ export default async function BookPage({ params }: BookPageProps) {
                     key={index}
                     className="relative aspect-3/4 rounded-lg overflow-hidden bg-gray-100 cursor-pointer hover:opacity-80 transition-opacity"
                   >
-                    <Image
+                    <img
                       src={image}
                       alt={`${book.title} - ${index + 2}`}
-                      fill
-                      className="object-cover"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   </div>
                 ))}

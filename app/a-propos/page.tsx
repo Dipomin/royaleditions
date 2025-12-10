@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Target, Users, Award, Heart } from "lucide-react";
@@ -32,11 +31,10 @@ export default function AboutPage() {
         <div className="container-custom">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="relative h-[500px] rounded-lg overflow-hidden">
-              <Image
+              <img
                 src="/assets/Logo-Royal-Editions.png"
                 alt="Royal Editions"
-                fill
-                className="object-contain"
+                className="absolute inset-0 w-full h-full object-contain"
               />
             </div>
             <div className="space-y-6">

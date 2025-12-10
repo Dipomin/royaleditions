@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Loader2, MapPin, Phone, Mail, Package } from "lucide-react";
-import Image from "next/image";
 
 interface OrderDetailClientProps {
   order: {
@@ -148,11 +147,10 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
                     className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg"
                   >
                     <div className="relative w-16 h-20 shrink-0">
-                      <Image
+                      <img
                         src={coverImage}
                         alt={item.book.title}
-                        fill
-                        className="object-cover rounded"
+                        className="absolute inset-0 w-full h-full object-cover rounded"
                       />
                     </div>
                     <div className="flex-1">

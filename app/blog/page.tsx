@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import Image from "next/image";
 import { Calendar, User, ArrowRight } from "lucide-react";
 
 async function getPublishedPosts() {
@@ -53,11 +52,10 @@ export default async function BlogPage() {
                 <Card className="overflow-hidden hover:shadow-xl transition-all duration-300 h-full group">
                   {/* Image */}
                   <div className="relative h-48 overflow-hidden">
-                    <Image
+                    <img
                       src={post.coverImage || "/assets/placeholder-blog.jpg"}
                       alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
 

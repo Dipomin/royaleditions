@@ -14,7 +14,6 @@ import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { ImageUploadModal } from "@/components/admin/image-upload-modal";
 import { toast } from "sonner";
 import { Loader2, Image as ImageIcon, X } from "lucide-react";
-import Image from "next/image";
 
 type BlogPostFormInput = {
   title: string;
@@ -178,12 +177,10 @@ export function BlogPostForm() {
             {/* Prévisualisation de l'image */}
             {coverImageUrl && (
               <div className="relative w-full aspect-video rounded-lg overflow-hidden border-2 border-gray-200">
-                <Image
+                <img
                   src={coverImageUrl}
                   alt="Couverture"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
                 <button
                   type="button"

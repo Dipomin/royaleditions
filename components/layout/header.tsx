@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { ShoppingCart, Menu, X, Search } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/lib/store/cart";
@@ -26,12 +25,9 @@ export function Header() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <Image
+            <img
               src="/assets/Logo-Royal-Editions.png"
               alt="Royal Editions"
-              width={220}
-              height={90}
-              priority
               className="h-24 w-auto"
             />
           </Link>

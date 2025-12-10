@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import { Calendar, User, ArrowLeft, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -114,12 +113,10 @@ export default async function BlogPostPage({
         {/* Cover Image */}
         {post.coverImage && (
           <div className="relative h-96 md:h-[500px] mb-12 rounded-xl overflow-hidden">
-            <Image
+            <img
               src={post.coverImage}
               alt={post.title}
-              fill
-              className="object-cover"
-              priority
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </div>
         )}
@@ -165,14 +162,13 @@ export default async function BlogPostPage({
                   <Link key={relatedPost.id} href={`/blog/${relatedPost.slug}`}>
                     <Card className="overflow-hidden hover:shadow-lg transition-shadow h-full group">
                       <div className="relative h-40 overflow-hidden">
-                        <Image
+                        <img
                           src={
                             relatedPost.coverImage ||
                             "/assets/placeholder-blog.jpg"
                           }
                           alt={relatedPost.title}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
                       <div className="p-4">

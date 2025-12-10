@@ -11,7 +11,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import Image from "next/image";
 
 interface ImageUploadModalProps {
   open: boolean;
@@ -256,12 +255,10 @@ export function ImageUploadModal({
                     key={img.key + index}
                     className="relative group border rounded-lg overflow-hidden bg-gray-50 aspect-square"
                   >
-                    <Image
+                    <img
                       src={img.url}
                       alt={img.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 50vw, 25vw"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
 
                     {/* Overlay avec actions */}

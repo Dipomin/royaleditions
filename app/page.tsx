@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/books/book-card";
@@ -134,12 +133,10 @@ export default async function Home() {
             </div>
 
             <div className="relative h-[500px] hidden lg:block">
-              <Image
+              <img
                 src="/assets/1000_techniques_book_2_transparent.png"
                 alt="Livre vedette"
-                fill
-                className="object-contain drop-shadow-2xl"
-                priority
+                className="absolute inset-0 w-full h-full object-contain drop-shadow-2xl"
               />
             </div>
           </div>
@@ -290,11 +287,10 @@ export default async function Home() {
                   <div className="flex items-center space-x-4 pt-4 border-t border-gray-100">
                     {testimonial.image && (
                       <div className="relative w-12 h-12 rounded-full overflow-hidden ring-2 ring-gold/20">
-                        <Image
+                        <img
                           src={testimonial.image}
                           alt={testimonial.name}
-                          fill
-                          className="object-cover"
+                          className="absolute inset-0 w-full h-full object-cover"
                         />
                       </div>
                     )}
@@ -345,11 +341,10 @@ export default async function Home() {
                 >
                   {post.coverImage && (
                     <div className="relative aspect-video overflow-hidden bg-gray-100">
-                      <Image
+                      <img
                         src={post.coverImage}
                         alt={post.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
                       <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>

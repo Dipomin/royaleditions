@@ -21,7 +21,6 @@ import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { ImageUploadModal } from "@/components/admin/image-upload-modal";
 import { toast } from "sonner";
 import { Loader2, ImagePlus, X } from "lucide-react";
-import Image from "next/image";
 import { parseBookImages } from "@/lib/utils/parse-images";
 
 interface Category {
@@ -360,12 +359,10 @@ export function BookForm({ categories, book }: BookFormProps) {
                       key={index}
                       className="relative aspect-square border rounded-lg overflow-hidden group"
                     >
-                      <Image
+                      <img
                         src={url}
                         alt={`Image ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 33vw, 150px"
+                        className="absolute inset-0 w-full h-full object-cover"
                       />
                       <button
                         type="button"

@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import Image from "next/image";
 import Link from "next/link";
 import { parseBookImages } from "@/lib/utils/parse-images";
 import { Badge } from "@/components/ui/badge";
@@ -121,12 +120,10 @@ export default async function BookDirectOrderPage({ params }: BookPageProps) {
             {/* COLONNE GAUCHE - Image (fixe sur desktop) */}
             <div className="lg:sticky lg:top-24 lg:self-start">
               <div className="relative aspect-3/4 rounded-2xl overflow-hidden bg-gray-100 shadow-xl">
-                <Image
+                <img
                   src={images[0] || "/placeholder-book.png"}
                   alt={book.title}
-                  fill
-                  className="object-cover"
-                  priority
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
                 {hasDiscount && (
                   <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full font-bold text-sm shadow-lg">
@@ -149,11 +146,10 @@ export default async function BookDirectOrderPage({ params }: BookPageProps) {
                       key={index}
                       className="relative aspect-3/4 rounded-lg overflow-hidden bg-gray-100"
                     >
-                      <Image
+                      <img
                         src={image}
                         alt={`${book.title} - ${index + 2}`}
-                        fill
-                        className="object-cover"
+                        className="absolute inset-0 w-full h-full object-cover"
                       />
                     </div>
                   ))}

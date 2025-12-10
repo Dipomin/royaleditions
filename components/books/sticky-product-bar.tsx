@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { AddToCartButton } from "@/components/books/add-to-cart-button";
 import { parseBookImages } from "@/lib/utils/parse-images";
 
@@ -46,11 +45,10 @@ export function StickyProductBar({ book }: StickyProductBarProps) {
           {/* Image et Info */}
           <div className="flex items-center gap-4 flex-1 min-w-0">
             <div className="relative w-16 h-20 shrink-0 rounded-lg overflow-hidden bg-gray-100">
-              <Image
+              <img
                 src={images[0] || "/placeholder-book.png"}
                 alt={book.title}
-                fill
-                className="object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
             <div className="min-w-0 flex-1">
