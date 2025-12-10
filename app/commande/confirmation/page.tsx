@@ -1,11 +1,18 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useSyncExternalStore, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { CheckCircle, Package, Phone, Mail, Home } from "lucide-react";
 import { PrintButton } from "@/components/order/print-button";
+
+// Déclarer gtag pour TypeScript
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
 
 interface OrderData {
   orderNumber: string;
@@ -52,6 +59,16 @@ export default function OrderConfirmationPage() {
     getServerSnapshot
   );
   const isLoading = false;
+
+  // Google Ads Conversion Tracking
+  useEffect(() => {
+    if (orderData && typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "conversion", {
+        send_to: "AW-17785014589/ERBuCO6MrM8bEL2Sx6BC",
+        transaction_id: orderData.orderNumber,
+      });
+    }
+  }, [orderData]);
 
   if (isLoading) {
     return (

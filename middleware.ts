@@ -10,6 +10,7 @@ const isPublicRoute = createRouteMatcher([
   '/panier',
   '/commander',
   '/commande',
+  '/commande/confirmation',
   '/conditions-generales',
   '/politique-confidentialite',
   '/mentions-legales',
