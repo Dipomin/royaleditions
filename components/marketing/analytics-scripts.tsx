@@ -23,7 +23,7 @@ export function AnalyticsScripts({
   const gaId =
     googleAnalyticsId ||
     process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ||
-    "G-H3QZZHDCPQ";
+    "G-SEP8NG939L";
   const hjid = hotjarId || process.env.NEXT_PUBLIC_HOTJAR_ID || "5223971";
   const hjsv = hotjarVersion || process.env.NEXT_PUBLIC_HOTJAR_VERSION || "6";
 
