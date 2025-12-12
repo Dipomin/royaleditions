@@ -1,8 +1,9 @@
 export const SITE_CONFIG = {
   name: 'Royal Editions',
   description: 'Des ouvrages qui forment, inspirent et transforment',
-  url: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
-  ogImage: '/assets/Logo-Royal-Editions.png',
+  url: process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  ogImage:
+    (process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000') + '/assets/Logo-Royal-Editions.png',
   links: {
     facebook: 'https://facebook.com/royaleditions',
     instagram: 'https://instagram.com/royaleditions',

@@ -24,6 +24,7 @@ export function AnalyticsScripts({
     googleAnalyticsId ||
     process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ||
     "G-SEP8NG939L";
+  const googleAdsId = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID || 'AW-17785014589';
   const hjid = hotjarId || process.env.NEXT_PUBLIC_HOTJAR_ID || "5223971";
   const hjsv = hotjarVersion || process.env.NEXT_PUBLIC_HOTJAR_VERSION || "6";
 
@@ -68,6 +69,8 @@ export function AnalyticsScripts({
           gtag('config', '${gaId}', {
             page_path: window.location.pathname,
           });
+          // Google Ads config (if provided)
+          gtag('config', '${googleAdsId}');
         `}
       </Script>
 

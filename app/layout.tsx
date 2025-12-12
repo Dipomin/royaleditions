@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
+  metadataBase: new URL(SITE_CONFIG.url),
   keywords: [
     "livres",
     "librairie",
