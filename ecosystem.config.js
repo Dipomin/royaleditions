@@ -1,9 +1,11 @@
+const path = require('path');
+
 module.exports = {
   apps: [
     {
       name: 'royaleditions',
-      script: '.next/standalone/server.js',
-      cwd: process.cwd(),
+      script: './.next/standalone/server.js',
+      cwd: __dirname, // Ensure PM2 uses the repo root where ecosystem.config.js is located
       instances: 1, // Mode standalone ne supporte pas le clustering natif
       exec_mode: 'fork',
       env: {
