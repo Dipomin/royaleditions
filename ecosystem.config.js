@@ -11,7 +11,8 @@ module.exports = {
       env: {
         NODE_ENV: 'production',
         PORT: process.env.PORT || 3001,
-        HOSTNAME: '0.0.0.0'
+        HOSTNAME: '0.0.0.0',
+        NEXT_PUBLIC_BUILD_ID: process.env.NEXT_PUBLIC_BUILD_ID || ''
       },
       error_file: './logs/err.log',
       out_file: './logs/out.log',

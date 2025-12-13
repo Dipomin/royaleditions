@@ -28,10 +28,13 @@ if pm2 describe "$APP_NAME" &>/dev/null; then
   pm2 delete "$APP_NAME" || true
 fi
 
-# Build
+# Create timestamp for this release
+timestamp=$(date +%s)
+export NEXT_PUBLIC_BUILD_ID="$timestamp"
+echo "[deploy-stop-start] NEXT_PUBLIC_BUILD_ID=$NEXT_PUBLIC_BUILD_ID"
 echo "[deploy-stop-start] Installing and building"
 npm ci --prefer-offline --no-audit --no-fund || true
-npm run build
+NEXT_PUBLIC_BUILD_ID="$NEXT_PUBLIC_BUILD_ID" npm run build
 
 # Validate output
 if [ ! -f .next/standalone/server.js ]; then
@@ -55,9 +58,10 @@ fi
 # Swap symlink
 ln -sfn "$RELEASE_DIR" .next/standalone
 
-# Start PM2
+# Start PM2 with build id env
 echo "[deploy-stop-start] Starting PM2 app"
-PORT=$PORT HOSTNAME=$HOSTNAME pm2 start ecosystem.config.js --update-env --name "$APP_NAME"
+export NEXT_PUBLIC_BUILD_ID="$NEXT_PUBLIC_BUILD_ID"
+NEXT_PUBLIC_BUILD_ID="$NEXT_PUBLIC_BUILD_ID" PORT=$PORT HOSTNAME=$HOSTNAME pm2 start ecosystem.config.js --update-env --name "$APP_NAME"
 pm2 save
 
 # Verify health endpoint

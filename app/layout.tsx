@@ -8,6 +8,7 @@ import { SITE_CONFIG } from "@/lib/constants";
 import { PurchaseNotification } from "@/components/marketing/purchase-notification";
 import { LiveChatWidget } from "@/components/marketing/live-chat-widget";
 import { AnalyticsScripts } from "@/components/marketing/analytics-scripts";
+import BuildCheckClient from "@/components/marketing/build-check-client";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -86,6 +87,7 @@ export default function RootLayout({
         <Toaster position="top-center" />
         <PurchaseNotification />
         <LiveChatWidget />
+        <BuildCheckClient />
       </body>
     </html>
   );

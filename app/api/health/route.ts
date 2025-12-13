@@ -21,6 +21,7 @@ export async function GET() {
     uptime,
     env,
     release,
+    buildId: process.env.NEXT_PUBLIC_BUILD_ID || null,
     ts: Date.now()
   });
 }

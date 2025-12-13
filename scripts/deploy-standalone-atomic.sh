@@ -38,10 +38,12 @@ timestamp=$(date +%s)
 RELEASE_DIR="$RELEASES_DIR/$timestamp"
 mkdir -p "$RELEASE_DIR"
 
-# Build
+# Build with embedded build id
 echo "[deploy-atomic] Installing and building"
 npm ci --prefer-offline --no-audit --no-fund || true
-npm run build
+export NEXT_PUBLIC_BUILD_ID="$timestamp"
+echo "[deploy-atomic] NEXT_PUBLIC_BUILD_ID=$NEXT_PUBLIC_BUILD_ID"
+NEXT_PUBLIC_BUILD_ID="$NEXT_PUBLIC_BUILD_ID" npm run build
 
 if [ ! -d .next/standalone ]; then
   echo "[deploy-atomic] ERROR: standalone output missing: .next/standalone"
@@ -75,13 +77,14 @@ fi
 mkdir -p "$RELEASES_DIR"
 ln -sfn "$RELEASE_DIR" .next/standalone
 
-# Ensure PM2 loads new code
+# Ensure PM2 loads new code, export build id to pm2 process
+export NEXT_PUBLIC_BUILD_ID="$NEXT_PUBLIC_BUILD_ID"
 if pm2 describe "$APP_NAME" &>/dev/null; then
-  echo "[deploy-atomic] Restarting PM2 app"
-  pm2 restart "$APP_NAME" || true
+  echo "[deploy-atomic] Restarting PM2 app with updated env"
+  pm2 restart "$APP_NAME" --update-env || true
 else
-  echo "[deploy-atomic] Starting PM2 app"
-  PORT=$PORT HOSTNAME=$HOSTNAME pm2 start ecosystem.config.js --update-env --name "$APP_NAME"
+  echo "[deploy-atomic] Starting PM2 app with updated env"
+  NEXT_PUBLIC_BUILD_ID="$NEXT_PUBLIC_BUILD_ID" PORT=$PORT HOSTNAME=$HOSTNAME pm2 start ecosystem.config.js --update-env --name "$APP_NAME"
 fi
 
 # Health check quickly using /api/health (retries)
@@ -111,6 +114,23 @@ if command -v curl >/dev/null; then
       echo "[deploy-atomic] No previous release available, inspect PM2 logs"
     fi
   fi
+    # verify build id matches
+    if [ $success -eq 1 ]; then
+      echo "[deploy-atomic] Verifying build id from /api/health"
+      if command -v jq >/dev/null; then
+        remote_build_id=$(curl -s "http://localhost:$PORT/api/health" | jq -r '.buildId') || true
+      else
+        remote_build_id=$(curl -s "http://localhost:$PORT/api/health" | sed -e 's/^.*"buildId"[ ]*:[ ]*"\([^"]*\)".*$/\1/' || true)
+      fi
+      if [ -n "$remote_build_id" ] && [ "$remote_build_id" != "$NEXT_PUBLIC_BUILD_ID" ]; then
+        echo "[deploy-atomic] Build id mismatch: server returned $remote_build_id, expected $NEXT_PUBLIC_BUILD_ID. Rolling back."
+        if [ -n "$PREV_RELEASE" ] && [ -d "$PREV_RELEASE" ]; then
+          ln -sfn "$PREV_RELEASE" .next/standalone
+          pm2 restart "$APP_NAME" || true
+          echo "[deploy-atomic] Rollback performed to $PREV_RELEASE"
+        fi
+      fi
+    fi
 fi
 
 # Dump pm2 logs last lines for visibility

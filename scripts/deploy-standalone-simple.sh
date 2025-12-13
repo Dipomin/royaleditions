@@ -33,12 +33,13 @@ if pm2 describe "$APP_NAME" &>/dev/null; then
   pm2 delete "$APP_NAME" || true
 fi
 
-# Installation + build
+# Installation + build with id
 echo "[deploy-simple] Installation des dépendances"
 npm ci --prefer-offline --no-audit --no-fund || true
 
-echo "[deploy-simple] Build"
-npm run build
+export NEXT_PUBLIC_BUILD_ID="$(date +%s)"
+echo "[deploy-simple] NEXT_PUBLIC_BUILD_ID=$NEXT_PUBLIC_BUILD_ID"
+NEXT_PUBLIC_BUILD_ID="$NEXT_PUBLIC_BUILD_ID" npm run build
 
 # Vérification minimale
 if [ ! -f .next/standalone/server.js ]; then
@@ -72,9 +73,10 @@ if command -v lsof >/dev/null; then
   fi
 fi
 
-# Lancement PM2
+# Lancement PM2 avec build id
 echo "[deploy-simple] Démarrage avec PM2"
-PORT=$PORT HOSTNAME=$HOSTNAME pm2 start ecosystem.config.js --update-env --name "$APP_NAME"
+export NEXT_PUBLIC_BUILD_ID="$NEXT_PUBLIC_BUILD_ID"
+NEXT_PUBLIC_BUILD_ID="$NEXT_PUBLIC_BUILD_ID" PORT=$PORT HOSTNAME=$HOSTNAME pm2 start ecosystem.config.js --update-env --name "$APP_NAME"
 pm2 save
 
 # Vérification rapide HTTP (optionnelle) - nécessite curl
