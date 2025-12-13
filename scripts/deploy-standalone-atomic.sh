@@ -14,6 +14,14 @@ cd "$REPO_ROOT"
 
 PORT="${PORT:-3001}"
 HOSTNAME="${HOSTNAME:-0.0.0.0}"
+KEEP_RELEASES="${KEEP_RELEASES:-5}"
+
+# Support CLI flags like --keep-last=N
+for arg in "$@"; do
+  case $arg in
+    --keep-last=* ) KEEP_RELEASES="${arg#*=}"; shift ;;
+  esac
+done
 APP_NAME="royaleditions"
 RELEASES_DIR="releases"
 
@@ -76,14 +84,25 @@ else
   PORT=$PORT HOSTNAME=$HOSTNAME pm2 start ecosystem.config.js --update-env --name "$APP_NAME"
 fi
 
-# Health check quickly
+# Health check quickly using /api/health (retries)
 if command -v curl >/dev/null; then
   echo "[deploy-atomic] Waiting for app to boot..."
-  sleep 2
-  status_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:$PORT/" || true)
-  echo "[deploy-atomic] Root endpoint returned: $status_code"
-  if [ "$status_code" != "200" ]; then
-    echo "[deploy-atomic] Health check failed, attempting rollback"
+  health_url="http://localhost:$PORT/api/health"
+  attempt=1
+  max_attempts=6
+  success=0
+  until [ $attempt -gt $max_attempts ]; do
+    status_code=$(curl -s -o /dev/null -w "%{http_code}" "$health_url" || true)
+    echo "[deploy-atomic] Health check attempt $attempt returned: $status_code"
+    if [ "$status_code" = "200" ]; then
+      success=1
+      break
+    fi
+    attempt=$((attempt+1))
+    sleep 1
+  done
+  if [ $success -ne 1 ]; then
+    echo "[deploy-atomic] Health check ($health_url) failed after $max_attempts attempts, attempting rollback"
     if [ -n "$PREV_RELEASE" ] && [ -d "$PREV_RELEASE" ]; then
       ln -sfn "$PREV_RELEASE" .next/standalone
       pm2 restart "$APP_NAME" || true
@@ -98,4 +117,19 @@ fi
 pm2 logs "$APP_NAME" --lines 50 --nostream || true
 
 echo "[deploy-atomic] Done. Release: $RELEASE_DIR"
+
+# Cleanup old releases but keep last $KEEP_RELEASES
+if [ -d "$RELEASES_DIR" ]; then
+  releases=( $(ls -1 "$RELEASES_DIR" | sort -n) )
+  total=${#releases[@]}
+  if [ $total -gt $KEEP_RELEASES ]; then
+    to_remove=$((total - KEEP_RELEASES))
+    echo "[deploy-atomic] Cleaning $to_remove old releases; keeping last $KEEP_RELEASES"
+    for ((i=0; i<to_remove; i++)); do
+      old=${releases[$i]}
+      echo "[deploy-atomic] Removing $RELEASES_DIR/$old"
+      rm -rf "$RELEASES_DIR/$old" || true
+    done
+  fi
+fi
 exit 0

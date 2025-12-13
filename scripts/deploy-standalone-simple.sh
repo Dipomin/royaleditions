@@ -13,6 +13,14 @@ REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 PORT="${PORT:-3001}"
 HOSTNAME="${HOSTNAME:-0.0.0.0}"
+KEEP_RELEASES="${KEEP_RELEASES:-5}"
+
+# Support CLI flags like --keep-last=N
+for arg in "$@"; do
+  case $arg in
+    --keep-last=* ) KEEP_RELEASES="${arg#*=}"; shift ;;
+  esac
+done
 APP_NAME="royaleditions"
 
 echo "[deploy-simple] Répertoire: $REPO_ROOT"
@@ -72,16 +80,32 @@ pm2 save
 # Vérification rapide HTTP (optionnelle) - nécessite curl
 if command -v curl >/dev/null; then
   sleep 2
-  echo "[deploy-simple] Vérification HTTP: http://localhost:$PORT/"
-  http_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:$PORT/") || true
-  echo "[deploy-simple] Code HTTP: $http_code"
-  if [ "$http_code" != "200" ]; then
-    echo "[deploy-simple] Attention: la racine retourne $http_code. Vérifiez pm2 logs --lines 50"
+  health_url="http://localhost:$PORT/api/health"
+  echo "[deploy-simple] Vérification HTTP (health): $health_url"
+  status_code=$(curl -s -o /dev/null -w "%{http_code}" "$health_url" || true)
+  echo "[deploy-simple] Health Code HTTP: $status_code"
+  if [ "$status_code" != "200" ]; then
+    echo "[deploy-simple] Attention: health retourne $status_code. Vérifiez pm2 logs --lines 50"
   fi
 fi
 
 pm2 logs "$APP_NAME" --lines 30 --nostream || true
 
 echo "[deploy-simple] Terminé. Consultez les logs PM2 en cas d'erreur."
+
+# Cleanup old releases
+if [ -d "releases" ]; then
+  releases=( $(ls -1 releases | sort -n) )
+  total=${#releases[@]}
+  if [ $total -gt $KEEP_RELEASES ]; then
+    to_remove=$((total - KEEP_RELEASES))
+    echo "[deploy-simple] Cleaning $to_remove old releases; keeping last $KEEP_RELEASES"
+    for ((i=0; i<to_remove; i++)); do
+      old=${releases[$i]}
+      echo "[deploy-simple] Removing releases/$old"
+      rm -rf "releases/$old" || true
+    done
+  fi
+fi
 
 exit 0
