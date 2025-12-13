@@ -38,7 +38,7 @@ export default function BuildCheckClient() {
           } catch (e) {
             // ignore
           }
-          window.location.reload(true);
+          window.location.reload();
         }
       } catch (e) {
         // ignore
